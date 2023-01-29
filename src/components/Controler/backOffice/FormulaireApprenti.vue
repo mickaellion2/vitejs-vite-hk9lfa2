@@ -19,7 +19,7 @@
             placeholder="obligatoire"
             minlength="1"
             maxlength="80"
-            :value="objet.nom"
+            :value="this.$parent.itemEdite.nom"
             required
           />
         </div>
@@ -480,16 +480,9 @@ export default {
     BoutonBase,
   },
   props:{
-    objetInit:Object
-  },
-  mounted: {
-    objet() {
-      return this.objetInit || {};
-    }
   },
   data() {
     return {
-      objet:{},
       afficheFormulaireMineur: false,
       afficheMineurNonEmancipe: true,
       afficheErreurs: true,

@@ -644,6 +644,6 @@ select {
 .editable *:hover {
   cursor: pointer;
   color:blue;
-  font-weight:bold;
+  zoom:1.1;
 }
 </style>
