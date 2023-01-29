@@ -22,7 +22,7 @@ export default {
       console.log(URL);
       const json = { mail: mail };
 
-      let reponse = await connexionAPIService.methods.requete(URL, json);
+      let reponse = await connexionAPIService.methods.requete(URL, null);
       console.log(reponse.code_reponse);
       if (reponse.code_reponse !== 0) {
         //Il faut renvoyer la reponse erreur au composant parent

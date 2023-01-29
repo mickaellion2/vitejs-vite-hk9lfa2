@@ -23,7 +23,7 @@
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Nom d'usage</span>
-          <input type="text" name="nom_usage" minlength="1" maxlength="80" />
+          <input type="text" name="nomUsage" minlength="1" maxlength="80" />
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Prénom</span>
@@ -49,8 +49,8 @@
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Sexe</span>
           <select name="sexe">
-            <option :value="M" label="Masculin">Masculin</option>
-            <option :value="F" label="Féminin">Féminin</option>
+            <option value="M" label="Masculin">Masculin</option>
+            <option value="F" label="Féminin">Féminin</option>
           </select>
         </div>
         <div class="inputBoxFacturier">
@@ -75,13 +75,12 @@
           <span class="detailFacturier">Commune de naissance</span>
           <input
             id="communesNaissanceRecherche"
-            :value="commune_de_naissance"
             type="text"
             placeholder="obligatoire"
             minlength="1"
             maxlength="80"
             required
-            @input="this.rechercheCommunes"
+            name="communeNaissance"
           />
           <!--select id="communesNaissanceListe" name="commune_de_naissance" @click="this.getListeCommunesNaissance">
 
@@ -97,10 +96,10 @@
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Régime social</span>
-          <select name="regime_social">
-            <option :value="0" label="--"></option>
-            <option :value="1" label="MSA"></option>
-            <option :value="2" label="URSSAF"></option>
+          <select name="regimeSocial">
+            <option value="0" label="--"></option>
+            <option value="1" label="MSA"></option>
+            <option value="2" label="URSSAF"></option>
           </select>
         </div>
         <div class="inputBoxFacturier">
@@ -118,7 +117,7 @@
           <span class="detailFacturier">Complément d'adresse</span>
           <input
             type="text"
-            name="complement_adresse"
+            name="adresse.adresse2"
             minlength="1"
             maxlength="155"
           />
@@ -127,7 +126,7 @@
           <span class="detailFacturier">Code postal</span>
           <input
             type="text"
-            name="code_postal"
+            name="adresse.codePostal"
             placeholder="obligatoire"
             minlength="1"
             maxlength="5"
@@ -138,7 +137,7 @@
           <span class="detailFacturier">Commune</span>
           <input
             type="text"
-            name="commune"
+            name="adresse.commune"
             placeholder="obligatoire"
             minlength="1"
             maxlength="80"
@@ -170,54 +169,54 @@
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Situation précédente</span>
-          <select name="situation_apprenti">
-            <option :value="1" label="Scolaire (hors DIMA)"></option>
-            <option :value="2" label="Prépa apprentissage"></option>
-            <option :value="3" label="Etudiant"></option>
-            <option :value="4" label="Contrat d’apprentissage"></option>
-            <option :value="5" label="Contrat de professionnalisation"></option>
-            <option :value="6" label="Contrat aidé"></option>
+          <select name="situationAvantContrat">
+            <option value="1" label="Scolaire (hors DIMA)"></option>
+            <option value="2" label="Prépa apprentissage"></option>
+            <option value="3" label="Etudiant"></option>
+            <option value="4" label="Contrat d’apprentissage"></option>
+            <option value="5" label="Contrat de professionnalisation"></option>
+            <option value="6" label="Contrat aidé"></option>
             <option
-              :value="7"
+              value="7"
               label="En formation au CFA sous statut de stagiaire de la formation professionnelle, avant signature d’un contrat d’apprentissage (L6222-12-1 du code du travail)"
             ></option>
             <option
-              :value="8"
+              value="8"
               label="En formation, au CFA sans contrat sous statut de stagiaire de la formation professionnelle, suite à rupture (5° de L6231-2 du code du travail)"
             ></option>
             <option
-              :value="9"
+              value="9"
               label="Autres situations sous statut de stagiaire de la formation professionnelle"
             ></option>
             <option :value="10" label="Salarié"></option>
             <option
-              :value="11"
+              value="11"
               label="Autres situations sous statut de stagiaire de la formation professionnellePersonne à la recherche d’un emploi (inscrite ou non à P&ocirc;le Emploi)"
             ></option>
-            <option :value="12" label="Inactif"></option>
+            <option value="12" label="Inactif"></option>
           </select>
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Dernier dipl&ocirc;me préparé</span>
-          <select name="dernier_diplome">
+          <select name="diplomePrepare">
             <optgroup label="Dipl&ocirc;me ou titre de niveau bac +5 et plus">
-              <option :value="80" label="Doctorat"></option>
-              <option :value="71" label="Master professionnel/DESS"></option>
-              <option :value="72" label="Master recherche/DEA"></option>
-              <option :value="73" label="Master indifférencié"></option>
+              <option value="80" label="Doctorat"></option>
+              <option value="71" label="Master professionnel/DESS"></option>
+              <option value="72" label="Master recherche/DEA"></option>
+              <option value="73" label="Master indifférencié"></option>
               <option
-                :value="74"
+                value="74"
                 label="Dipl&ocirc;me d'ingénieur, dipl&ocirc;me d'école de commerce"
               ></option>
               <option
-                :value="79"
+                value="79"
                 label="Autre dipl&ocirc;me ou titre de niveau bac+5 ou plus"
               ></option>
             </optgroup>
             <optgroup label="Dipl&ocirc;me ou titre de niveau bac +3 et 4 ">
-              <option :value="61" label="1ère année de Master"></option>
-              <option :value="62" label="Licence professionnelle"></option>
-              <option :value="63" label="Licence générale"></option>
+              <option value="61" label="1ère année de Master"></option>
+              <option value="62" label="Licence professionnelle"></option>
+              <option value="63" label="Licence générale"></option>
               <option
                 :value="69"
                 label="Autre dipl&ocirc;me ou titre de niveau bac +3 ou 4"
@@ -275,7 +274,7 @@
           <span class="detailFacturier">Intitulé dernier dipl&ocirc;me</span>
           <textarea
             type="text"
-            name="intitule_dernier_diplome"
+            name="intituleDiplomePrepare"
             placeholder="obligatoire"
             minlength="1"
             maxlength="255"
@@ -284,7 +283,7 @@
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Derniere classe suivie</span>
-          <select name="derniere_classe_suivie">
+          <select name="derniereClasse">
             <option
               :value="parseInt('01', 8)"
               label="L’apprenti a suivi la dernière année du cycle de formation et a obtenu le dipl&ocirc;me ou titre"
@@ -331,7 +330,7 @@
           <span class="detailFacturier">N° sécurité sociale</span>
           <input
             type="text"
-            name="numero_de_securite_sociale"
+            name="nir"
             placeholder="obligatoire"
             minlength="13"
             maxlength="13"
@@ -354,7 +353,7 @@
           style="display: flex; flex-direction: row"
         >
           <span class="detailFacturier">Travailleur handicapé</span>
-          <input type="checkbox" name="travailleur_handicape" />
+          <input type="checkbox" name="handicap" />
         </div>
         <div class="inputBoxFacturier">
           <div
@@ -541,7 +540,7 @@ export default {
         /*for(var nomProp in obj) {
           let inputElt,
               form = this.$el;
-          
+
           if( inputElt = form.elements[nomProp]) {
             inputElt.value = obj[nomProp];
           }
@@ -550,10 +549,16 @@ export default {
         for (let inputElt of form.elements) {
           let prop = inputElt.name;
           if (prop) {
-            let props = prop.split('.');
-            inputElt.value = props.reduce(function (a, c) {
-              return a[c];
-            }, obj) || '';
+            let props = prop.split('.'), v;
+            v = props.reduce(function (a, c) {
+                return a[c];
+              }, obj) || '';
+            if(inputElt.type == 'checkbox') {
+              inputElt.checked = (v==1) || (v == 'true');
+            }
+            else {
+              inputElt.value = v;
+            }
           }
         }
       }
