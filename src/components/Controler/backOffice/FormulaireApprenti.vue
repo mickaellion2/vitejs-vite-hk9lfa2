@@ -1,6 +1,4 @@
 <template>
-  <!--En attendant de pouvoir implémenter correctement les enums-->
-
   <form class="formulaireAjoutFacturier">
     <fieldset class="titreFormulaireFacturier">
       <legend>
@@ -19,19 +17,19 @@
             placeholder="obligatoire"
             minlength="1"
             maxlength="80"
-            :value="this.$parent.itemEdite.nom"
+            name="nom"
             required
           />
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Nom d'usage</span>
-          <input type="text" v-model="nom_usage" minlength="1" maxlength="80" />
+          <input type="text" name="nom_usage" minlength="1" maxlength="80" />
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Prénom</span>
           <input
             type="text"
-            v-model="prenom"
+            name="prenom"
             placeholder="obligatoire"
             minlength="1"
             maxlength="80"
@@ -50,7 +48,7 @@
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Sexe</span>
-          <select v-model="sexe">
+          <select name="sexe">
             <option :value="M" label="Masculin">Masculin</option>
             <option :value="F" label="Féminin">Féminin</option>
           </select>
@@ -60,7 +58,7 @@
           <select
             id="departementsNaissanceListe"
             v-on:change="this.getListeCommunesNaissance"
-            v-model="departement_de_naissance"
+            name="departementNaissance"
             placeholder="obligatoire"
             required
             maxlength="3"
@@ -68,6 +66,9 @@
             pattern="^[0-9]{1,3}$"
           >
             <option label="Choisir" selected>0</option>
+            <option v-for="dept in listeDepartements" :value="dept.code">
+              {{ dept.code }} - {{ dept.nom }}
+            </option>
           </select>
         </div>
         <div class="inputBoxFacturier">
@@ -82,13 +83,13 @@
             required
             @input="this.rechercheCommunes"
           />
-          <!--select id="communesNaissanceListe" v-model="commune_de_naissance" @click="this.getListeCommunesNaissance">
+          <!--select id="communesNaissanceListe" name="commune_de_naissance" @click="this.getListeCommunesNaissance">
 
                     </select-->
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Nationalité</span>
-          <select v-model="nationalite" required>
+          <select name="nationalite" required>
             <option :value="1">Française</option>
             <option :value="2">Union Européenne</option>
             <option :value="3">Etranger hors Union Européenne</option>
@@ -96,7 +97,7 @@
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Régime social</span>
-          <select v-model="regime_social">
+          <select name="regime_social">
             <option :value="0" label="--"></option>
             <option :value="1" label="MSA"></option>
             <option :value="2" label="URSSAF"></option>
@@ -106,7 +107,7 @@
           <span class="detailFacturier">Adresse</span>
           <input
             type="text"
-            v-model="adresse"
+            name="adresse.adresse1"
             placeholder="obligatoire"
             minlength="1"
             maxlength="50"
@@ -117,7 +118,7 @@
           <span class="detailFacturier">Complément d'adresse</span>
           <input
             type="text"
-            v-model="complement_adresse"
+            name="complement_adresse"
             minlength="1"
             maxlength="155"
           />
@@ -126,7 +127,7 @@
           <span class="detailFacturier">Code postal</span>
           <input
             type="text"
-            v-model="code_postal"
+            name="code_postal"
             placeholder="obligatoire"
             minlength="1"
             maxlength="5"
@@ -137,7 +138,7 @@
           <span class="detailFacturier">Commune</span>
           <input
             type="text"
-            v-model="commune"
+            name="commune"
             placeholder="obligatoire"
             minlength="1"
             maxlength="80"
@@ -149,7 +150,7 @@
           <input
             type="tel"
             pattern="^((\+)33|0)[1-9](\d{2}){4}$"
-            v-model="telephone"
+            name="telephone"
             placeholder="obligatoire"
             minlength="1"
             maxlength="13"
@@ -160,7 +161,7 @@
           <span class="detailFacturier">Courriel</span>
           <input
             type="email"
-            v-model="courriel"
+            name="courriel"
             placeholder="obligatoire"
             minlength="1"
             maxlength="80"
@@ -169,7 +170,7 @@
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Situation précédente</span>
-          <select v-model="situation_apprenti">
+          <select name="situation_apprenti">
             <option :value="1" label="Scolaire (hors DIMA)"></option>
             <option :value="2" label="Prépa apprentissage"></option>
             <option :value="3" label="Etudiant"></option>
@@ -198,7 +199,7 @@
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Dernier dipl&ocirc;me préparé</span>
-          <select v-model="dernier_diplome">
+          <select name="dernier_diplome">
             <optgroup label="Dipl&ocirc;me ou titre de niveau bac +5 et plus">
               <option :value="80" label="Doctorat"></option>
               <option :value="71" label="Master professionnel/DESS"></option>
@@ -274,7 +275,7 @@
           <span class="detailFacturier">Intitulé dernier dipl&ocirc;me</span>
           <textarea
             type="text"
-            v-model="intitule_dernier_diplome"
+            name="intitule_dernier_diplome"
             placeholder="obligatoire"
             minlength="1"
             maxlength="255"
@@ -283,7 +284,7 @@
         </div>
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Derniere classe suivie</span>
-          <select v-model="derniere_classe_suivie">
+          <select name="derniere_classe_suivie">
             <option
               :value="parseInt('01', 8)"
               label="L’apprenti a suivi la dernière année du cycle de formation et a obtenu le dipl&ocirc;me ou titre"
@@ -330,7 +331,7 @@
           <span class="detailFacturier">N° sécurité sociale</span>
           <input
             type="text"
-            v-model="numero_de_securite_sociale"
+            name="numero_de_securite_sociale"
             placeholder="obligatoire"
             minlength="13"
             maxlength="13"
@@ -341,7 +342,7 @@
           <span class="detailFacturier">Clé n° sécurité sociale</span>
           <input
             type="text"
-            v-model="cle_numero_de_securite_sociale"
+            name="cle_numero_de_securite_sociale"
             placeholder="obligatoire"
             minlength="0"
             maxlength="2"
@@ -353,7 +354,7 @@
           style="display: flex; flex-direction: row"
         >
           <span class="detailFacturier">Travailleur handicapé</span>
-          <input type="checkbox" v-model="travailleur_handicape" />
+          <input type="checkbox" name="travailleur_handicape" />
         </div>
         <div class="inputBoxFacturier">
           <div
@@ -370,7 +371,7 @@
                 :value="afficheMineurNonEmancipe"
                 @input="this.SiMineurEmancipe"
                 type="checkbox"
-                v-model="mineur_emancipe"
+                name="mineur_emancipe"
                 required
               />
             </div>
@@ -390,7 +391,7 @@
             <span class="detailFacturier">Nom du représentant légal</span>
             <input
               type="text"
-              v-model="nom_du_representant_legal"
+              name="nom_du_representant_legal"
               minlength="1"
               maxlength="80"
             />
@@ -399,7 +400,7 @@
             <span class="detailFacturier">Adresse du représentant légal</span>
             <input
               type="text"
-              v-model="adresse_du_representant_legal"
+              name="adresse_du_representant_legal"
               minlength="1"
               maxlength="50"
             />
@@ -410,7 +411,7 @@
             >
             <input
               type="text"
-              v-model="code_postal_du_representant_legal"
+              name="code_postal_du_representant_legal"
               minlength="0"
               maxlength="5"
             />
@@ -419,7 +420,7 @@
             <span class="detailFacturier">Prénom du représentant légal</span>
             <input
               type="text"
-              v-model="prenom_du_representant_legal"
+              name="prenom_du_representant_legal"
               minlength="1"
               maxlength="80"
             />
@@ -430,7 +431,7 @@
             >
             <input
               type="text"
-              v-model="complement_adresse_du_representant_legal"
+              name="complement_adresse_du_representant_legal"
               minlength="0"
               maxlength="155"
             />
@@ -439,7 +440,7 @@
             <span class="detailFacturier">Commune du représentant légal</span>
             <input
               type="text"
-              v-model="commune_du_representant_legal"
+              name="commune_du_representant_legal"
               minlength="0"
               maxlength="80"
             />
@@ -454,7 +455,7 @@
 
       <BoutonBase
         class="BoutonBaseRecherche"
-        intituleBouton="ajouter"
+        intituleBouton="Soumettre"
         v-on:click="this.rentrerApprentiBDD"
       ></BoutonBase>
       <div v-if="afficheErreurs" class="erreur">
@@ -479,10 +480,10 @@ export default {
   components: {
     BoutonBase,
   },
-  props:{
-  },
+  props: {},
   data() {
     return {
+      listeDepartements: [],
       afficheFormulaireMineur: false,
       afficheMineurNonEmancipe: true,
       afficheErreurs: true,
@@ -521,9 +522,42 @@ export default {
     };
   },
   mounted() {
-    this.getListeDepartements();
+    var _this = this;
+    if (
+      document.querySelector('#departementsNaissanceListe').childElementCount <=
+      1
+    ) {
+      this.getListeDepartements().then((d) => {
+        _this.init();
+      });
+    } else {
+      this.init();
+    }
   },
   methods: {
+    init() {
+      let obj = this.$parent.itemEdite;
+      if (obj) {
+        /*for(var nomProp in obj) {
+          let inputElt,
+              form = this.$el;
+          
+          if( inputElt = form.elements[nomProp]) {
+            inputElt.value = obj[nomProp];
+          }
+        }*/
+        let form = this.$el;
+        for (let inputElt of form.elements) {
+          let prop = inputElt.name;
+          if (prop) {
+            let props = prop.split('.');
+            inputElt.value = props.reduce(function (a, c) {
+              return a[c];
+            }, obj) || '';
+          }
+        }
+      }
+    },
     SiApprentiMineur(event) {
       console.log(event);
       //on recupere la date du jour
@@ -560,27 +594,14 @@ export default {
         this.$emit('afficheMineurNonEmancipe', event);
       }
     },
-    getListeDepartements() {
-      if (
-        document.querySelector('#departementsNaissanceListe')
-          .childElementCount <= 1
-      ) {
-        this.$data.listeGeographie = fetch(
-          'https://geo.api.gouv.fr/departements'
-        )
-          .then((response) => response.json())
-          .then((data) =>
-            data.forEach((element) => {
-              let a = document.createElement('option');
-              //a.setAttribute(":value", element.code);
-              a.innerHTML = element.code;
-              a.setAttribute('label', element.code + '-' + element.nom);
-              document
-                .getElementById('departementsNaissanceListe')
-                .appendChild(a);
-            })
-          );
-      }
+    async getListeDepartements() {
+      var _this = this;
+      return fetch('https://geo.api.gouv.fr/departements')
+        .then((response) => response.json())
+        .then((data) => {
+          _this.listeDepartements = data;
+          return data;
+        });
     },
     getListeCommunesNaissance() {
       let v;

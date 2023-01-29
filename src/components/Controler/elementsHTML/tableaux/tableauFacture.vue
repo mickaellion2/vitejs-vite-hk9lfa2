@@ -641,9 +641,14 @@ select {
   width: 40px;
   margin: 5px;
 }
-.editable *:hover {
+.editable:hover {
   cursor: pointer;
-  color:blue;
-  zoom:1.1;
+  color:white;
+  background:blue;
+}
+
+form.formulaireAjoutFacturier {
+  border: dashed #ffaece 7px;
+  border-radius: 20px;
 }
 </style>
