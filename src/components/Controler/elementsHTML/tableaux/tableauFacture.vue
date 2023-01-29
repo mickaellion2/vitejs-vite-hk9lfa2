@@ -232,11 +232,10 @@ export default {
   methods: {
     editFacturier(e) {
       let form = e.currentTarget,
-        t = e.target,
-        p;
-      if (t && (p = t.parentNode) && p.classList && p.classList == 'editable') {
-        let numItem = parseInt(p.parentNode.getAttribute('data-num')),
-          prop = p.getAttribute('data-prop'),
+        t = e.target;
+      if (t.classList == 'editable') {
+        let numItem = parseInt(t.parentNode.getAttribute('data-num')),
+          prop = t.getAttribute('data-prop'),
           item = this.items[numItem];
         if (item) {
           let p = prop.split('.');
@@ -643,10 +642,15 @@ select {
 }
 .editable:hover {
   cursor: pointer;
-  color:white;
-  background:blue;
+  color: white;
+  background: blue;
 }
-
+.editable {
+  background: inherit;
+}
+.editable * {
+  pointer-events: none;
+}
 form.formulaireAjoutFacturier {
   border: dashed #ffaece 7px;
   border-radius: 20px;
