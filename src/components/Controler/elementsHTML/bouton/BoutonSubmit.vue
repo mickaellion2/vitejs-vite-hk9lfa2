@@ -34,10 +34,11 @@ export default {
       let form = this.$el.form;
       connexionAPIService.methods.requete(form.action, form).then(reponse=>{
         if(reponse.code_reponse!==0){
-          console.log("erreur mot de passe");
+          console.log("erreur code reponse");
+          _this.$emit('onEspaceSubmitFail', reponse);
         }
         else{
-          _this.$emit('onEspaceSubmitSuccess', r);
+          _this.$emit('onEspaceSubmitSuccess', reponse);
         }
       });
     }

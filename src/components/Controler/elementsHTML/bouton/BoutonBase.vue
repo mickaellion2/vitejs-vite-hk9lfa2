@@ -3,7 +3,7 @@
       type="submit"
       :value = "intitule"
   />  
-  <button v-else-if="intitule" @click="$emit(this.evenement, param)">
+  <button v-else-if="intitule" @click="$emit(this.evenement)">
     <font-awesome-icon
       v-if="type == 'ouvrirformulaire'"
       class="fontIcone"
@@ -13,13 +13,13 @@
   </button>
   <font-awesome-icon
     v-else-if="(type == 'ouvrirformulaire') && nonEtatBouton"
-    @click="$emit(this.evenement, param)"
+    @click="$emit(this.evenement)"
     class="fontIcone"
     icon="fa-file-circle-plus"
   />
   <font-awesome-icon
     v-else
-    @click="$emit(this.evenement, param)"
+    @click="$emit(this.evenement)"
     class="fontIcone iconeOn"
     icon="fa-file-circle-minus"
   />
@@ -31,7 +31,6 @@ export default {
   props: {
     intituleBouton: String,
     evenementBouton: String,
-    paramBouton: String,
     type: String,
     etatBouton:Boolean
   },
@@ -44,8 +43,7 @@ export default {
     return {
       btnClass: this.btnClass || 'boutonFlashy',
       intitule: this.intituleBouton || '',
-      evenement: this.evenementBouton || 'boutonClique',
-      param: this.paramBouton || this.intituleBouton
+      evenement: this.evenementBouton || 'boutonClique'
     };
   },
 };

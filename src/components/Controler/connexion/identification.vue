@@ -4,17 +4,17 @@
     <section class="formulaire">
       <h1>Connexion</h1>
       <section class="entreeUtilisateur">
-        <input v-model="email" type="email" name="email" id="email" required="required">
+        <input type="email" name="mail" id="email" required="required">
         <span>e-mail</span>
         <i></i>
       </section>
       <section class="entreeUtilisateur">
-        <input v-model="password" type="password" name="password" id="password" required="required">
+        <input type="password" name="password" id="password" required="required">
         <span>mot de passe</span>
         <i></i>
       </section>
     </section>
-    <BoutonSubmit  @on-espace-submit-ok="ok">
+    <BoutonSubmit  @on-espace-submit-fail="fail" @on-espace-submit-success="ok">
     </BoutonSubmit>
   </section>
   </form>
@@ -35,12 +35,15 @@ export default {
     }
   },
   methods:{
-    ok() {
+    ok(reponse) {
       localStorage.setItem("nom", reponse.extra_info.nom);
         localStorage.setItem("prenom", reponse.extra_info.prenom);
         localStorage.setItem("avatar", reponse.extra_info.avatar);
         localStorage.setItem("mail", reponse.extra_info.mail);
         this.$router.push({name:'facturierPlusModerne'});
+    },
+    fail(r) {
+      alert(r.Error_info);
     }
   }
 
