@@ -1,15 +1,15 @@
 <template>
   <!--En attendant de pouvoir implémenter correctement les enums-->
 
-  <form class="formulaire">
+  <form class="formulaireAjoutFacturier">
     <fieldset class="titreFormulaireFacturier">
       <legend>
-          Formulaire Apprenti (<a
-            target="_blank"
-            href="https://www.formulaires.service-public.fr/gf/getNotice.do?cerfaNotice=51649&cerfaFormulaire=10103"
-            style="font-weight: bold"
-            >Aide</a
-          >)
+        Formulaire Apprenti (<a
+          target="_blank"
+          href="https://www.formulaires.service-public.fr/gf/getNotice.do?cerfaNotice=51649&cerfaFormulaire=10103"
+          style="font-weight: bold"
+          >Aide</a
+        >)
       </legend>
       <div class="detailApprenti">
         <div class="inputBoxFacturier">
@@ -197,9 +197,7 @@
           </select>
         </div>
         <div class="inputBoxFacturier">
-          <span class="detailFacturier"
-            >Dernier dipl&ocirc;me préparé</span
-          >
+          <span class="detailFacturier">Dernier dipl&ocirc;me préparé</span>
           <select v-model="dernier_diplome">
             <optgroup label="Dipl&ocirc;me ou titre de niveau bac +5 et plus">
               <option :value="80" label="Doctorat"></option>
@@ -273,9 +271,7 @@
           </select>
         </div>
         <div class="inputBoxFacturier">
-          <span class="detailFacturier"
-            >Intitulé dernier dipl&ocirc;me</span
-          >
+          <span class="detailFacturier">Intitulé dernier dipl&ocirc;me</span>
           <textarea
             type="text"
             v-model="intitule_dernier_diplome"
@@ -748,5 +744,4 @@ option {
 .formulaire {
   width: 90%;
 }
-
 </style>

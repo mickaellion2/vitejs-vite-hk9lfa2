@@ -86,7 +86,7 @@ export default {
         nomCollection,
         configuration.data().urlPossibles.obtenir
       );
-      let reponseBDD = await connexionAPIService.methods.requete(URL, {});
+      let reponseBDD = await connexionAPIService.methods.requete(URL, null);
       if (reponseBDD.code_reponse !== 0) {
         alert('erreur get ' + nomCollection + ' : ' + reponseBDD.Error_info);
       } else {

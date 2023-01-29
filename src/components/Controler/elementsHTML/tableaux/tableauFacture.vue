@@ -16,7 +16,17 @@
     </thead>
     <tbody id="tbodyfiltresFacturier">
       <tr>
-        <td id="premiereCaseTableauRecherche"></td>
+        <td id="premiereCaseTableauRecherche">
+          <form id="formcreadossier">
+            <input type="hidden" name="cdate" value="" />
+            <div class="boutonCreationDossier" @click="creerDossier">
+              <span class="iconeAjout"
+                ><font-awesome-icon icon="fa-person-circle-plus"
+              /></span>
+              <span>Nouveau dossier</span>
+            </div>
+          </form>
+        </td>
         <td>
           <select>
             <option>Choisir</option>
@@ -87,28 +97,19 @@
     <tbody>
       <tr>
         <td colspan="10">
-          <form method="post" class="formulaire formulaireAjoutFacturier">
-            <FormulaireOpco
-              v-if="etatFormulaire == 'opco'"
-              v-on:remetEtatInitial="this.remetEtatInitial"
-              id="formOpco"
-              @insertion-bdd="insereObjetDansBdd"
-            >
-            </FormulaireOpco>
-            <FormulaireApprenti
-              v-if="etatFormulaire == 'apprenti'"
-              v-on:remetEtatInitial="this.remetEtatInitial"
-              id="formApprenti"
-            >
-            </FormulaireApprenti>
-          </form>
-
-          <div class="boutonCreationDossier">
-            <span class="iconeAjout"
-              ><font-awesome-icon icon="fa-person-circle-plus"
-            /></span>
-            <span>Creer un nouveau dossier</span>
-          </div>
+          <FormulaireOpco
+            v-if="etatFormulaire == 'opco'"
+            v-on:remetEtatInitial="this.remetEtatInitial"
+            id="formOpco"
+            @insertion-bdd="insereObjetDansBdd"
+          >
+          </FormulaireOpco>
+          <FormulaireApprenti
+            v-if="etatFormulaire == 'apprenti'"
+            v-on:remetEtatInitial="this.remetEtatInitial"
+            id="formApprenti"
+          >
+          </FormulaireApprenti>
         </td>
       </tr>
     </tbody>
@@ -199,6 +200,19 @@ export default {
     },
   },*/
   methods: {
+    creerDossier(e) {
+      let form = document.getElementById("formcreadossier");,
+        url = construitURLService.methods.construitURLConnectionBack("dossier", configuration.data().urlPossibles.ajouter);
+      form.elements.cdate.value = Date.now();
+      connexionAPIService.methods.requete(url, form).then(reponse=>{
+        if(reponse.code_reponse!==0){
+          
+        }
+        else{
+          
+        }
+      });
+    },
     etatEcheance(echeance) {
       let r = this.resteAPayer(echeance),
         d = echeance.dateOuverture,
@@ -303,8 +317,7 @@ export default {
         .then((reponseBDD) => {
           if (reponseBDD.code_reponse !== 0) {
             alert('erreur insereObjetDansBdd : ' + reponseBDD.Error_info);
-          }
-          else {
+          } else {
             json._id = reponseBDD.extra_info;
             this.$emit('insertionObjetOk', nomCollection, json);
             console.log(
@@ -484,7 +497,7 @@ select {
 }
 
 .boutonCreationDossier {
-  margin: 0.5rem 3rem 0.5rem 3rem;
+  margin: 0.5rem 1rem 0.5rem 1rem;
   padding: 0.3rem;
   text-align: center;
   border-style: dashed;
@@ -493,6 +506,9 @@ select {
   text-transform: capitalize;
   border-radius: 10px;
   transition-duration: 1s;
+  background: white;
+  line-height: 16px;
+  text-align: center;
 }
 
 .iconeAjout {
@@ -502,10 +518,12 @@ select {
 .boutonCreationDossier span {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+  display: inline-block;
 }
 
 .boutonCreationDossier:hover {
   font-size: 120%;
+  cursor: pointer;
 }
 
 #lignesDuFacturier {

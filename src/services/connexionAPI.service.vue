@@ -3,8 +3,7 @@ export default {
   name: 'connexionAPI.service',
   methods: {
     async requete(url, form) {
-      let f = form ? form : new FormData();
-      f = new FormData(form);
+      let f = form ? new FormData(form) : new FormData();
       return  await fetch(url, {
           method: 'POST',
           body: f

@@ -1,5 +1,5 @@
 <template>
-  <form id="formid" :action="action">
+  <form id="formid" :action="action" class="formulaireAjoutFacturier">
     <legend class="titreFormulaireFacturier">
       <h5>
         Formulaire Opco
