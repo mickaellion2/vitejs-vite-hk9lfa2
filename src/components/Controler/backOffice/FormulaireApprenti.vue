@@ -16,10 +16,10 @@
           <span class="detailFacturier">Nom de naissance</span>
           <input
             type="text"
-            v-model="nom_de_naissance"
             placeholder="obligatoire"
             minlength="1"
             maxlength="80"
+            :value="objet.nom"
             required
           />
         </div>
@@ -479,8 +479,17 @@ export default {
   components: {
     BoutonBase,
   },
+  props:{
+    objetInit:Object
+  },
+  mounted: {
+    objet() {
+      return this.objetInit || {};
+    }
+  },
   data() {
     return {
+      objet:{},
       afficheFormulaireMineur: false,
       afficheMineurNonEmancipe: true,
       afficheErreurs: true,
