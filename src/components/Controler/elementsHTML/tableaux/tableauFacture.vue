@@ -1,157 +1,155 @@
 <template>
-  <table id="tablefacturier">
-    <thead id="theadTableauFacturier">
-      <tr>
-        <th>N°</th>
-        <th>Apprenti</th>
-        <th>Formation</th>
-        <th>Employeur</th>
-        <th>Contrat</th>
-        <th>OPCO</th>
-        <th>Reste</th>
-        <th>Factures</th>
-        <th>Etape</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="tbodyfiltresFacturier">
-      <tr>
-        <td id="premiereCaseTableauRecherche">
-          <form id="formcreadossier">
-            <input type="hidden" name="cdate" value="" />
-            <div class="boutonCreationDossier" @click="creerDossier">
-              <span class="iconeAjout"
-                ><font-awesome-icon icon="fa-person-circle-plus"
-              /></span>
-              <span>Nouveau dossier</span>
-            </div>
-          </form>
-        </td>
-        <td>
-          <select>
-            <option>Choisir</option>
-          </select>
-          <BoutonBase
-            class="BtnAfficheFormulaire"
-            :etatBouton="etatFormulaire == 'apprenti'"
-            :type="typeBtnAfficherFormulaire"
-            @click="changeEtatBoutonFormulaire('apprenti')"
-          ></BoutonBase>
-        </td>
-        <td>
-          <select>
-            <option>Choisir</option>
-            <option>CI</option>
-            <option>CDUI</option>
-            <option>COM</option>
-            <option>GPME</option>
-            <option>MCO</option>
-            <option>MMV</option>
-            <option>NDRC</option>
-            <option>SAM</option>
-          </select>
-          <BoutonBase
-            class="BtnAfficheFormulaire"
-            :etatBouton="etatFormulaire == 'section'"
-            :type="typeBtnAfficherFormulaire"
-            @click="changeEtatBoutonFormulaire('section')"
-          ></BoutonBase>
-        </td>
-        <td>
-          <select>
-            <option>Choisir</option>
-          </select>
-          <BoutonBase
-            class="BtnAfficheFormulaire"
-            :etatBouton="etatFormulaire == 'employeur'"
-            :type="typeBtnAfficherFormulaire"
-            @click="changeEtatBoutonFormulaire('employeur')"
-          ></BoutonBase>
-          <!--bouton-base @click="formMaitre = true" class="BoutonBaseRecherche" id="BoutonBaseRechercheMaitre" :intituleBouton="this.$data.nomBoutonMaitre" v-on:click="this.ajouterUnMaitre"></bouton-base-->
-        </td>
-        <td></td>
-        <td>
-          <select>
-            <option value="0">Choisir</option>
-            <option v-for="objet in opcos" :value="objet._id.$oid">
-              {{ objet.nom }}
-            </option>
-          </select>
-          <BoutonBase
-            class="BtnAfficheFormulaire"
-            :etatBouton="etatFormulaire == 'opco'"
-            :type="typeBtnAfficherFormulaire"
-            @click="changeEtatBoutonFormulaire('opco')"
-          ></BoutonBase>
-        </td>
-        <td></td>
-        <td></td>
-        <td>
-          <select>
-            <option>en cours</option>
-          </select>
-        </td>
-        <td></td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr>
-        <td colspan="10">
-          <FormulaireOpco
-            v-if="etatFormulaire == 'opco'"
-            v-on:remetEtatInitial="this.remetEtatInitial"
-            id="formOpco"
-            @insertion-bdd="insereObjetDansBdd"
-          >
-          </FormulaireOpco>
-          <FormulaireApprenti
-            v-if="etatFormulaire == 'apprenti'"
-            v-on:remetEtatInitial="this.remetEtatInitial"
-            id="formApprenti"
-          >
-          </FormulaireApprenti>
-        </td>
-      </tr>
-    </tbody>
-    <tbody id="lignesDuFacturier">
-      <tr v-for="item in items">
-        <td>{{ item.cerfa.numeroExterne }}</td>
-        <td>
-          <span v-if="item.cerfa.apprenti"
-            >{{ item.cerfa.apprenti.prenom }}
-            {{ item.cerfa.apprenti.nom }}</span
-          >
-        </td>
-        <td>
-          <span v-if="item.cerfa.formation"
-            >{{ item.cerfa.formation.intituleQualification }}
-          </span>
-        </td>
-        <td>
-          <span v-if="item.cerfa.employeur">{{
-            item.cerfa.employeur.denomination
-          }}</span>
-        </td>
-        <td>
-          <span v-if="item.cerfa.contrat">{{
-            formateDate(item.cerfa.contrat.dateDebutContrat)
-          }}</span>
-        </td>
-        <td>{{ item.opco }}</td>
-        <td>{{ resteAPayer(item.echeances) }}</td>
-        <td>
-          <span
-            :class="'echeance echeance-' + etatEcheance(echeance)"
-            v-for="echeance in item.echeances"
-            >{{ resteAPayer(echeance) }}</span
-          >
-        </td>
-        <td></td>
-        <td>{{ item.cerfa.etat }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <MiseAJourService @ongetliste="miseAJour"></MiseAJourService>
+
+    <table id="tablefacturier" @click="editFacturier">
+      <thead id="theadTableauFacturier">
+        <tr>
+          <th>N°</th>
+          <th>Apprenti</th>
+          <th>Formation</th>
+          <th>Employeur</th>
+          <th>Contrat</th>
+          <th>OPCO</th>
+          <th>Reste</th>
+          <th>Factures</th>
+          <th>Etape</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbodyfiltresFacturier">
+        <tr>
+          <td id="premiereCaseTableauRecherche">
+            <form id="formcreadossier">
+              <input type="hidden" name="cdate" value="" />
+              <input type="hidden" name="cerfa.etat" value="0" />
+              <div class="boutonCreationDossier" @click="creerDossier">
+                <span class="iconeAjout"
+                  ><font-awesome-icon icon="fa-person-circle-plus"
+                /></span>
+                <span>Nouveau dossier</span>
+              </div>
+            </form>
+          </td>
+          <td>
+            <select>
+              <option>Choisir</option>
+            </select>
+            
+          </td>
+          <td>
+            <select>
+              <option>Choisir</option>
+              <option>CI</option>
+              <option>CDUI</option>
+              <option>COM</option>
+              <option>GPME</option>
+              <option>MCO</option>
+              <option>MMV</option>
+              <option>NDRC</option>
+              <option>SAM</option>
+            </select>
+            
+          </td>
+          <td>
+            <select>
+              <option>Choisir</option>
+            </select>
+           
+            <!--bouton-base @click="formMaitre = true" class="BoutonBaseRecherche" id="BoutonBaseRechercheMaitre" :intituleBouton="this.$data.nomBoutonMaitre" v-on:click="this.ajouterUnMaitre"></bouton-base-->
+          </td>
+          <td></td>
+          <td>
+            <select>
+              <option value="0">Choisir</option>
+              <option v-for="objet in opcos" :value="objet._id.$oid">
+                {{ objet.nom }}
+              </option>
+            </select>
+           
+          </td>
+          <td></td>
+          <td></td>
+          <td>
+            <select>
+              <option>en cours</option>
+            </select>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <td colspan="10">
+            <FormulaireOpco
+              v-if="etatFormulaire == 'opco'"
+              v-on:remetEtatInitial="this.remetEtatInitial"
+              id="formOpco"
+              @insertion-bdd="insereObjetDansBdd"
+            >
+            </FormulaireOpco>
+            <FormulaireApprenti
+              v-if="etatFormulaire == 'apprenti'"
+              v-on:remetEtatInitial="this.remetEtatInitial"
+              id="formApprenti"
+            >
+            </FormulaireApprenti>
+          </td>
+        </tr>
+      </tbody>
+      <tbody id="lignesDuFacturier">
+        <tr v-for="item in itemsAffiches">
+          <td>{{ item.cerfa.numeroExterne || item.cerfa.numeroInterne || 'NOUVEAU' }}</td>
+          <td class="editable">
+            <span v-if="item.cerfa.apprenti"
+              >{{ item.cerfa.apprenti.prenom }}
+              {{ item.cerfa.apprenti.nom }}</span>
+            <font-awesome-icon v-else 
+              @click="$emit(this.evenement)"
+              class="fontIcone"
+              icon="fa-file-circle-plus"/>            
+          </td>
+          <td>
+            <span v-if="item.cerfa.formation"
+              >{{ item.cerfa.formation.intituleQualification }}
+            </span>
+            <font-awesome-icon v-else 
+              @click="$emit(this.evenement)"
+              class="fontIcone"
+              icon="fa-file-circle-plus"/> 
+          </td>
+          <td>
+            <span v-if="item.cerfa.employeur">{{
+              item.cerfa.employeur.denomination
+            }}</span>
+            <font-awesome-icon v-else 
+              @click="$emit(this.evenement)"
+              class="fontIcone"
+              icon="fa-file-circle-plus"/> 
+          </td>
+          <td>
+            <span v-if="item.cerfa.contrat">{{
+              formateDate(item.cerfa.contrat.dateDebutContrat)
+            }}</span>
+          </td>
+          <td>{{ item.opco }}</td>
+          <td>{{ resteAPayer(item.echeances) }}</td>
+          <td>
+            <span
+              :class="'echeance echeance-' + etatEcheance(echeance)"
+              v-for="echeance in item.echeances"
+              >{{ resteAPayer(echeance) }}</span
+            >
+          </td>
+          <td></td>
+          <td>{{ item.cerfa.etat }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <MiseAJourService @ongetliste="miseAJour"></MiseAJourService>
+    <div class="navtable">
+      <button class="changepage" :disabled="this.pageCourante === 0" @click="changePage(false)">&larr;</button>
+          <span> {{ pageCourante + 1 }} / {{ nbTotalPages }}</span>
+            <button class="changepage" :disabled="this.pageCourante +1 >= nbTotalPages" @click="changePage">&rarr;</button>
+        </div>
 </template>
 
 <script>
@@ -192,24 +190,42 @@ export default {
       apprentis: [],
       employeurs: [],
       dossiers: [],
+      nbItemsParPage:6,
+      pageCourante:0
     };
   },
-  /*computed: {
-    opcos: function () {
-      return this.opcos || [];
+  computed:{
+    itemsAffiches() {
+        return this.items.slice(
+            this.pageCourante * this.nbItemsParPage,
+            this.pageCourante * this.nbItemsParPage + this.nbItemsParPage
+        )
     },
-  },*/
+    nbTotalPages() {
+       return Math.ceil(this.items.length / this.nbItemsParPage);
+    }
+  },
   methods: {
-    creerDossier(e) {
-      let form = document.getElementById("formcreadossier");,
-        url = construitURLService.methods.construitURLConnectionBack("dossier", configuration.data().urlPossibles.ajouter);
-      form.elements.cdate.value = Date.now();
-      connexionAPIService.methods.requete(url, form).then(reponse=>{
-        if(reponse.code_reponse!==0){
-          
+    editFacturier(e) {
+      let form = e.currentTarget,
+          t = e.target;
+        if(t && t.classList && (t.classList == 'editable') ) {
+          let numItem, prop;
         }
-        else{
-          
+    },
+    changePage(next=true) {
+      this.pageCourante += next ? 1 : -1;
+    },
+    creerDossier(e) {
+      let form = document.getElementById('formcreadossier'),
+        url = construitURLService.methods.construitURLConnectionBack(
+          'dossier',
+          configuration.data().urlPossibles.ajouter
+        );
+      form.elements.cdate.value = Date.now();
+      connexionAPIService.methods.requete(url, form).then((reponse) => {
+        if (reponse.code_reponse !== 0) {
+        } else {
         }
       });
     },
@@ -257,12 +273,15 @@ export default {
         liste.forEach((d) => {
           if (d.echeances) {
             d.echeances.sort((a, b) => {
-              return (
+              return 
                 +(a.dateOuverture > b.dateOuverture) ||
-                +(a.dateOuverture == b.dateOuverture) - 1
-              );
+                (+(a.dateOuverture == b.dateOuverture) - 1);
             });
           }
+        });
+        liste.sort((a,b) =>{
+          let _a = a.cdate || 0, _b = b.cdate || 0;
+          return  +(_a < _b) || (+(_a == _b) - 1);
         });
         this.items = liste;
         let apprentis = liste.reduce((a, c) => {
@@ -440,6 +459,9 @@ export default {
   transition-property: height;
   transition-duration: 1s;
 }
+#tbodyfiltresFacturier tr {
+  background:#c0c9d8;
+}
 #tablefacturier thead tr th,
 #tbodyfiltresFacturier tr td {
   text-align: center;
@@ -537,7 +559,7 @@ select {
   border-radius: 7px;
   box-shadow: 0px 5px 5px -3px;
 }
-#lignesDuFacturier tr:nth-child(even) {
+#lignesDuFacturier tr:nth-child(odd) {
   background: white;
 }
 .detailApprenti select {
@@ -572,5 +594,17 @@ select {
 .echeance-en_cours {
   background: #eaeaff;
   color: black;
+}
+.navtable  {
+  position: absolute;
+  bottom:5px;
+  width:100%;
+  text-align:center;
+  background:white;
+}
+.navtable button.changepage {
+  display:inline-block;
+  width:40px;
+  margin:5px;
 }
 </style>
