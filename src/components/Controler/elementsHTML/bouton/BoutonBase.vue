@@ -1,6 +1,5 @@
 <template>
-  <input v-if="evenement=='onEspaceSubmit'" @click="$emit(this.evenement)"
-      type="submit"
+  <button v-if="evenement=='onEspaceSubmit'" @click="$emit(this.evenement)"
       :value = "intitule"
   />  
   <button v-else-if="intitule" @click="$emit(this.evenement)">

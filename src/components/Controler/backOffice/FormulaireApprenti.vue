@@ -1,5 +1,5 @@
 <template>
-  <form class="formulaireAjoutFacturier">
+  <form :data-service="action" id="formapprenti" class="formulaireAjoutFacturier">
     <fieldset class="titreFormulaireFacturier">
       <legend>
         Formulaire Apprenti (<a
@@ -9,6 +9,8 @@
           >Aide</a
         >)
       </legend>
+      <input type="hidden" name="__base__" value="cerfa.apprenti" />
+      <input type="hidden" name="__id__" value="0" />
       <div class="detailApprenti">
         <div class="inputBoxFacturier">
           <span class="detailFacturier">Nom de naissance</span>
@@ -337,17 +339,7 @@
             required
           />
         </div>
-        <div class="inputBoxFacturier">
-          <span class="detailFacturier">Clé n° sécurité sociale</span>
-          <input
-            type="text"
-            name="cle_numero_de_securite_sociale"
-            placeholder="obligatoire"
-            minlength="0"
-            maxlength="2"
-            required
-          />
-        </div>
+        
         <div
           class="inputBoxFacturier"
           style="display: flex; flex-direction: row"
@@ -452,16 +444,17 @@
         v-on:click="this.effacerFormulaire"
       ></BoutonBase>
 
-      <BoutonBase
-        class="BoutonBaseRecherche"
-        intituleBouton="Soumettre"
-        v-on:click="this.rentrerApprentiBDD"
-      ></BoutonBase>
+      
       <div v-if="afficheErreurs" class="erreur">
         <p>{{ messageErreur }}</p>
       </div>
     </fieldset>
   </form>
+  <BoutonBase
+        class="BoutonBaseRecherche"
+        intituleBouton="Soumettre"
+        data-formid="formapprenti"
+      ></BoutonBase>
 </template>
 
 <script>
@@ -482,6 +475,10 @@ export default {
   props: {},
   data() {
     return {
+      action: construitURLService.methods.construitURLConnectionBack(
+        'dossier',
+        configuration.data().urlPossibles.modifier
+      ),
       listeDepartements: [],
       afficheFormulaireMineur: false,
       afficheMineurNonEmancipe: true,
@@ -535,34 +532,33 @@ export default {
   },
   methods: {
     init() {
-      let obj = this.$parent.itemEdite;
+      let obj = this.$parent.itemEdite,
+        form = this.$el,
+        _id_ = this.$parent.idCourant;
+      form.elements['__id__'].value = _id_;
       if (obj) {
-        /*for(var nomProp in obj) {
-          let inputElt,
-              form = this.$el;
-
-          if( inputElt = form.elements[nomProp]) {
-            inputElt.value = obj[nomProp];
-          }
-        }*/
-        let form = this.$el;
         for (let inputElt of form.elements) {
           let prop = inputElt.name;
           if (prop) {
-            let props = prop.split('.'), v;
-            v = props.reduce(function (a, c) {
+            if (prop == '__id__') {
+              continue;
+            }
+            let props = prop.split('.'),
+              v;
+            v =
+              props.reduce(function (a, c) {
                 return a[c];
               }, obj) || '';
-            if(inputElt.type == 'checkbox') {
-              inputElt.checked = (v==1) || (v == 'true');
-            }
-            else {
+            if (inputElt.type == 'checkbox') {
+              inputElt.checked = v == 1 || v == 'true';
+            } else {
               inputElt.value = v;
             }
           }
         }
       }
     },
+    beforeSubmit() {},
     SiApprentiMineur(event) {
       console.log(event);
       //on recupere la date du jour

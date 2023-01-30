@@ -1,4 +1,22 @@
 <template>
+<div>
+
+          <FormulaireOpco
+            v-if="etatFormulaire == 'opco'"
+            v-on:remetEtatInitial="this.remetEtatInitial"
+            id="formOpco"
+            @insertion-bdd="insereObjetDansBdd"
+          >
+          </FormulaireOpco>
+          <FormulaireApprenti
+            v-if="etatFormulaire == 'cerfa.apprenti'"
+            v-on:remetEtatInitial="this.remetEtatInitial"
+            :objetInit="itemEdite"
+            id="formApprenti"
+          >
+          </FormulaireApprenti>
+
+    </div>
   <table id="tablefacturier" @click="editFacturier">
     <thead id="theadTableauFacturier">
       <tr>
@@ -72,26 +90,7 @@
         <td></td>
       </tr>
     </tbody>
-    <tbody>
-      <tr>
-        <td colspan="10">
-          <FormulaireOpco
-            v-if="etatFormulaire == 'opco'"
-            v-on:remetEtatInitial="this.remetEtatInitial"
-            id="formOpco"
-            @insertion-bdd="insereObjetDansBdd"
-          >
-          </FormulaireOpco>
-          <FormulaireApprenti
-            v-if="etatFormulaire == 'cerfa.apprenti'"
-            v-on:remetEtatInitial="this.remetEtatInitial"
-            :objetInit="itemEdite"
-            id="formApprenti"
-          >
-          </FormulaireApprenti>
-        </td>
-      </tr>
-    </tbody>
+    
     <tbody id="lignesDuFacturier">
       <tr
         v-for="(item, index) in itemsAffiches"
@@ -213,9 +212,10 @@ export default {
       apprentis: [],
       employeurs: [],
       dossiers: [],
-      nbItemsParPage: 6,
+      nbItemsParPage: 10,
       pageCourante: 0,
       itemEdite: null,
+      idCourant: 0,
     };
   },
   computed: {
@@ -231,9 +231,8 @@ export default {
   },
   methods: {
     editFacturier(e) {
-      let form = e.currentTarget,
-        t = e.target;
-      if (t.classList == 'editable') {
+      let t = e.target;
+      if (t.classList && t.classList.contains('editable')) {
         let numItem = parseInt(t.parentNode.getAttribute('data-num')),
           prop = t.getAttribute('data-prop'),
           item = this.items[numItem];
@@ -242,6 +241,10 @@ export default {
           this.itemEdite = p.reduce(function (a, c) {
             return a[c];
           }, item);
+          this.idCourant =
+            typeof item._id == 'string'
+              ? item._id
+              : "ObjectId('" + item._id.$oid + ")'";
           this.changeEtaFormulaire(prop);
         }
       }
@@ -634,6 +637,9 @@ select {
   bottom: 5px;
   width: 100%;
   text-align: center;
+}
+.navtable span {
+  background: white;
 }
 .navtable button.changepage {
   display: inline-block;
