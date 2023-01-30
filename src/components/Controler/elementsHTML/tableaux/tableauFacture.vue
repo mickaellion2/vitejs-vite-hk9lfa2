@@ -5,13 +5,11 @@
             v-if="etatFormulaire == 'opco'"
             v-on:remetEtatInitial="this.remetEtatInitial"
             id="formOpco"
-            @insertion-bdd="insereObjetDansBdd"
           >
           </FormulaireOpco>
           <FormulaireApprenti
             v-if="etatFormulaire == 'cerfa.apprenti'"
             v-on:remetEtatInitial="this.remetEtatInitial"
-            :objetInit="itemEdite"
             id="formApprenti"
           >
           </FormulaireApprenti>
@@ -244,7 +242,7 @@ export default {
           this.idCourant =
             typeof item._id == 'string'
               ? item._id
-              : "ObjectId('" + item._id.$oid + ")'";
+              : "ObjectId('" + item._id.$oid + "')";
           this.changeEtaFormulaire(prop);
         }
       }

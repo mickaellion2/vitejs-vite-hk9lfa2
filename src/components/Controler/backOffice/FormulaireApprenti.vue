@@ -1,5 +1,5 @@
 <template>
-  <form :data-service="action" id="formapprenti" class="formulaireAjoutFacturier">
+  <form :data-service="action" id="formApprenti" class="formulaireAjoutFacturier">
     <fieldset class="titreFormulaireFacturier">
       <legend>
         Formulaire Apprenti (<a
@@ -443,22 +443,23 @@
         intituleBouton="effacer"
         v-on:click="this.effacerFormulaire"
       ></BoutonBase>
-
+      <BoutonSubmit
+        class="BoutonBaseRecherche"
+        intituleBouton="Soumettre"
+        data-formid="formApprenti"
+      ></BoutonSubmit>
       
       <div v-if="afficheErreurs" class="erreur">
         <p>{{ messageErreur }}</p>
       </div>
     </fieldset>
   </form>
-  <BoutonBase
-        class="BoutonBaseRecherche"
-        intituleBouton="Soumettre"
-        data-formid="formapprenti"
-      ></BoutonBase>
+  
 </template>
 
 <script>
 import BoutonBase from '@/components/Controler/elementsHTML/bouton/BoutonBase.vue';
+import BoutonSubmit from '@/components/Controler/elementsHTML/bouton/BoutonSubmit.vue';
 import construitURLService from '@/services/construitURL.service.vue';
 //import {Apprenti} from "@/components/Model/Apprenti.Class";
 //import {Apprenti} from "@/components/Model/ApprentiTS.Class";
@@ -471,6 +472,7 @@ export default {
   name: 'FormulaireApprenti',
   components: {
     BoutonBase,
+    BoutonSubmit
   },
   props: {},
   data() {
@@ -524,17 +526,17 @@ export default {
       1
     ) {
       this.getListeDepartements().then((d) => {
-        _this.init();
+        _this.init('formApprenti');
       });
     } else {
-      this.init();
+      this.init('formApprenti');
     }
   },
   methods: {
-    init() {
-      let obj = this.$parent.itemEdite,
-        form = this.$el,
-        _id_ = this.$parent.idCourant;
+    init(formid = '', _obj = null) {
+      let obj   = _obj || this.$parent.itemEdite,
+          form  = (this.$el.nodeName == 'FORM')? this.$el : document.getElementById(formid),
+          _id_  = this.$parent.idCourant;
       form.elements['__id__'].value = _id_;
       if (obj) {
         for (let inputElt of form.elements) {

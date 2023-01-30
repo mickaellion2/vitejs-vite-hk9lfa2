@@ -31,11 +31,11 @@ export default {
     onSubmit(e) {
       /*if (this.$parent.methods.beforeSubmit) {
         this.$parent.methods.beforeSubmit();
-      }*/
+      }*/      
       var _this = this;
-      let form = this.$el.form || document.getElementById(this.$el.data.formid);
+      let form = this.$el.form || document.getElementById(this.$el.getAttribute('data-formid'));
       if (form.reportValidity()) {
-        let url = form.data.service;
+        let url = form.getAttribute('data-service');
         connexionAPIService.methods
           .requete(url, form)
           .then((reponse) => {
