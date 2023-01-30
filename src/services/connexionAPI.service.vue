@@ -1,5 +1,5 @@
 <script>
-const ErreurHTML = '';
+var ErreurHTML = '';
 export default {
   name: 'connexionAPI.service',
   methods: {
@@ -13,10 +13,12 @@ export default {
           if (!reponse.ok) {
             throw new Error(`HTTP erreur. status : ${reponse.status}`);
           }
-          if (true) {
-            ErreurHTML = reponse.text();
-            document.body.append(t);
+          /*if (true) {
+            //ErreurHTML = reponse.text();
+            let r = reponse.body.tee();
+            ErreurHTML = r[0].text();
           }
+          return r[1].json();*/
           return reponse.json();
         })
         .catch((e) => {

@@ -1,5 +1,9 @@
 <template>
-  <form :data-service="action" id="formApprenti" class="formulaireAjoutFacturier">
+  <form
+    :data-service="action"
+    id="formApprenti"
+    class="formulaireAjoutFacturier"
+  >
     <fieldset class="titreFormulaireFacturier">
       <legend>
         Formulaire Apprenti (<a
@@ -339,7 +343,7 @@
             required
           />
         </div>
-        
+
         <div
           class="inputBoxFacturier"
           style="display: flex; flex-direction: row"
@@ -448,13 +452,12 @@
         intituleBouton="Soumettre"
         data-formid="formApprenti"
       ></BoutonSubmit>
-      
+
       <div v-if="afficheErreurs" class="erreur">
         <p>{{ messageErreur }}</p>
       </div>
     </fieldset>
   </form>
-  
 </template>
 
 <script>
@@ -472,7 +475,7 @@ export default {
   name: 'FormulaireApprenti',
   components: {
     BoutonBase,
-    BoutonSubmit
+    BoutonSubmit,
   },
   props: {},
   data() {
@@ -534,17 +537,20 @@ export default {
   },
   methods: {
     init(formid = '', _obj = null) {
-      let obj   = _obj || this.$parent.itemEdite,
-          form  = (this.$el.nodeName == 'FORM')? this.$el : document.getElementById(formid),
-          _id_  = this.$parent.idCourant;
+      let obj = _obj || this.$parent.itemEdite,
+        form =
+          this.$el.nodeName == 'FORM'
+            ? this.$el
+            : document.getElementById(formid),
+        _id_ = this.$parent.idCourant;
       form.elements['__id__'].value = _id_;
       if (obj) {
         for (let inputElt of form.elements) {
+          if (inputElt.type == 'hidden') {
+            continue;
+          }
           let prop = inputElt.name;
           if (prop) {
-            if (prop == '__id__') {
-              continue;
-            }
             let props = prop.split('.'),
               v;
             v =
