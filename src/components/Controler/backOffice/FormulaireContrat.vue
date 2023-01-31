@@ -1,111 +1,158 @@
 <template>
-    <header class="titreFormulaireFacturier">
-        <h5>Formulaire Contrat</h5>
-        <a target="_blank" href="https://www.formulaires.service-public.fr/gf/getNotice.do?cerfaNotice=51649&cerfaFormulaire=10103" style="font-weight: bold;">Aide pour remplir le formulaire</a>
-        <!--En attendant de pouvoir implémenter correctement les enums-->
-    </header>
-    <form class="formulaire">
+    <form :action="action" class="formulaireAjoutFacturier">
+    <fieldset class="titreFormulaireFacturier">
+      <legend>
+        Formulaire Contrat (<a
+          target="_blank"
+          href="https://www.formulaires.service-public.fr/gf/getNotice.do?cerfaNotice=51649&cerfaFormulaire=10103"
+          style="font-weight: bold"
+          >Aide</a
+        >)
+      </legend>
+      <input type="hidden" name="__base__" value="cerfa.contrat" />
+      <input type="hidden" name="__id__" value="0" />
         <div class="detailContrat">
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Mode contractuel</span>
-                <select v-model="mode_contractuel" required>
-                    <option :value="1" label="à durée limitée"></option>
-                    <option :value="2" label="dans le cadre d’un CDI"></option>
-                    <option :value="3" label="entreprise de travail temporaire"></option>
-                    <option :value="4" label="activités saisonnières à deux employeurs"></option>
+                <select name="modeContractuel" required>
+                    <option value="1" label="à durée limitée"></option>
+                    <option value="2" label="dans le cadre d’un CDI"></option>
+                    <option value="3" label="entreprise de travail temporaire"></option>
+                    <option value="4" label="activités saisonnières à deux employeurs"></option>
                 </select>
             </div>
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Type de contrat ou d’avenant</span>
-                <select v-model="type_de_contrat" @change="this.SiContratPrecedent" required>
+                <select name="typeContratApp" @change="this.SiContratPrecedent" required>
                     <optgroup label="Contrat initial">
-                        <option :value="11" label="Premier contrat d’apprentissage de l’apprenti"></option>
+                        <option value="11" label="Premier contrat d’apprentissage de l’apprenti"></option>
                     </optgroup>
                     <optgroup label="Succession de contrats">
-                        <option :value="21" label="Nouveau contrat avec un apprenti qui a terminé son précédent contrat auprès d’un même employeur"></option>
-                        <option :value="22" label="Nouveau contrat avec un apprenti qui a terminé son précédent contrat auprès d’un autre employeur"></option>
-                        <option :value="23" label="Nouveau contrat avec un apprenti dont le précédent contrat auprès d’un autre employeur a été rompu"></option>
+                        <option value="21" label="Nouveau contrat avec un apprenti qui a terminé son précédent contrat auprès d’un même employeur"></option>
+                        <option value="22" label="Nouveau contrat avec un apprenti qui a terminé son précédent contrat auprès d’un autre employeur"></option>
+                        <option value="23" label="Nouveau contrat avec un apprenti dont le précédent contrat auprès d’un autre employeur a été rompu"></option>
                     </optgroup>
                     <optgroup label="Avenant : modification des conditions du contrat">
-                        <option :value="31" label="Modification de la situation juridique de l’employeur"></option>
-                        <option :value="32" label="Changement d’employeur dans le cadre d’un contrat saisonnier"></option>
-                        <option :value="33" label="Prolongation du contrat suite à un échec à l’examen de l’apprenti"></option>
-                        <option :value="34" label="Prolongation du contrat suite à la reconnaissance de l’apprenti comme travailleur handicap"></option>
-                        <option :value="35" label="Modification du diplôme préparé par l’apprenti"></option>
-                        <option :value="36" label="Autres changements : changement de maître d’apprentissage, de durée de travail hebdomadaire, réduction de durée, etc"></option>
-                        <option :value="37" label="Modification du lieu d’exécution du contrat"></option>
+                        <option value="31" label="Modification de la situation juridique de l’employeur"></option>
+                        <option value="32" label="Changement d’employeur dans le cadre d’un contrat saisonnier"></option>
+                        <option value="33" label="Prolongation du contrat suite à un échec à l’examen de l’apprenti"></option>
+                        <option value="34" label="Prolongation du contrat suite à la reconnaissance de l’apprenti comme travailleur handicap"></option>
+                        <option value="35" label="Modification du diplôme préparé par l’apprenti"></option>
+                        <option value="36" label="Autres changements : changement de maître d’apprentissage, de durée de travail hebdomadaire, réduction de durée, etc"></option>
+                        <option value="37" label="Modification du lieu d’exécution du contrat"></option>
                     </optgroup>
                 </select>
             </div>
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Type de dérogation</span>
 
-                <select v-model="type_de_derogation">
-                    <option :value="11" label="Age de l’apprenti inférieur à 16 ans"></option>
-                    <option :value="12" label="Age supérieur à 29 ans : cas spécifiques prévus dans le code du travail"></option>
-                    <option :value="21" label="Réduction de la durée du contrat ou de la période d’apprentissage"></option>
-                    <option :value="22" label="Allongement de la durée du contrat ou de la période d’apprentissage"></option>
-                    <option :value="50" label="Cumul de dérogations"></option>
-                    <option :value="60" label="Autre dérogation"></option>
+                <select name="typeDerogation">
+                    <option value="11" label="Age de l’apprenti inférieur à 16 ans"></option>
+                    <option value="12" label="Age supérieur à 29 ans : cas spécifiques prévus dans le code du travail"></option>
+                    <option value="21" label="Réduction de la durée du contrat ou de la période d’apprentissage"></option>
+                    <option value="22" label="Allongement de la durée du contrat ou de la période d’apprentissage"></option>
+                    <option value="50" label="Cumul de dérogations"></option>
+                    <option value="60" label="Autre dérogation"></option>
                 </select>
             </div>
             <div class="inputBoxFacturier">
                 <div v-if="afficheContratPrecedent==true">
                     <span class="detailFacturier">Numéro de contrat précédent</span>
-                    <input  id="numero_contrat_precedent" type="text" :value="numero_contrat_precedent"  required>
-
+                    <input  id="numero_contrat_precedent" type="text" name="numeroContratPrecedent"  required>
                 </div>
             </div>
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Date de conclusion</span>
-                <input id="dateNaissanceContrat" type="date" v-model="date_conclusion" @change="this.verificationDates" required>
+                <input id="dateNaissanceContrat" type="date" name="dateConclusion" @change="this.verificationDates" required>
             </div>
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Date de début d’exécution</span>
-                <input id="dateNaissanceContrat" type="date" v-model="date_debut_execution_contrat" @change="this.verificationDates" required>
+                <input id="dateNaissanceContrat" type="date" name="dateDebutContrat" @change="this.verificationDates" required>
             </div>
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Date de fin de contrat</span>
-                <input id="dateNaissanceContrat" type="date" v-model="date_fin_contrat" @change="this.verificationDates" required>
+                <input id="dateNaissanceContrat" type="date" name="dateFinContrat" @change="this.verificationDates" required>
             </div>
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Durée hebdo. de travail (h)</span>
-                <input id="dateNaissanceContrat" type="text" v-model="duree_hebdomadaire_travail_heures" required>
+                <input id="dateNaissanceContrat" type="text" name="dureeTravailHebdoHeures" required>
             </div>
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Durée hebdo. de travail (min)</span>
-                <input id="dateNaissanceContrat" type="text" v-model="duree_hebdomadaire_travail_minutes" required>
+                <input id="dateNaissanceContrat" type="text" name="dureeTravailHebdoMinutes" required>
             </div>
 
             <div class="inputBoxFacturier" style="display:flex;flex-direction: row;">
                 <span class="detailFacturier">Travail sur machines dangereuses</span>
-                <input type="checkbox" v-model="travail_sur_machines_dangereuses" required>
+                <input type="checkbox" name="travailRisque" required>
             </div>
 
             <div v-if="afficheFormulaireAvenant==true" class="etudiantAvenant">
                 <div class="inputBoxFacturier">
                     <span class="detailFacturier">Date d'effet de l'avenant</span>
-                    <input type="date" :value="date_effet_avenant" @change="this.SiContratAvenant">
+                    <input type="date" value="dateEffetAvenant" @change="this.SiContratAvenant">
                 </div>
             </div> 
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Salaire brut à l'embauche</span>
-                <input id="dateNaissanceContrat" type="text" v-model="salaire_brut_embauche" required>
+                <input id="dateNaissanceContrat" type="text" name="salaireEmbauche" required>
             </div>
 
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Date de début année 1</span>
-                <input id="dateNaissanceContrat" type="date" :value="date_début_annee_un" @input="this.SiContratAvenant" required>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[0].dateDebut" @input="this.SiContratAvenant" required>
             </div>
             <div class="inputBoxFacturier">
                 <span class="detailFacturier">Date de fin année 1</span>
-                <input id="dateNaissanceContrat" type="date" :value="date_fin_annee_un" @input="this.SiContratAvenant" required>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[0].dateFin" @input="this.SiContratAvenant" required>
             </div>
-            <div class="inputBoxFacturier" oninput="x.value='' + parseInt(a.value) + '%'">
+            <div class="inputBoxFacturier">
                 <span class="detailFacturier">Pourcentage année 1</span>
-                <input type="number" name="a" v-model="pourcentage_annee_un" min="0" max=" 100" step="0.01">
-                <output name="x"></output>
+                <input type="number" name="remunerationsAnnuelles[0].taux" min="0" max=" 100" step="1">
             </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Type de salaire</span>
+                <select name="remunerationsAnnuelles[0].typeSalaire">
+                    <option value="SMIC" label="SMIC : salaire minimum de croissance"></option>
+                    <option value="SMC" label="SMC : salaire minimum conventionnel"></option>
+                </select>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Ordre des rémunérations annuelles</span>
+                <input type="text" name="remunerationsAnnuelles[0].ordre" placeholder="1.1 ou 1.2 ou 2.1, etc">
+            </div>
+
+
+
+
+
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Date de début année 2</span>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[1].dateDebut" @input="this.SiContratAvenant" required>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Date de fin année 2</span>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[1].dateFin" @input="this.SiContratAvenant" required>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Pourcentage année 2</span>
+                <input type="number" name="remunerationsAnnuelles[1].taux" min="0" max=" 100" step="1">
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Type de salaire</span>
+                <select name="remunerationsAnnuelles[1].typeSalaire">
+                    <option value="SMIC" label="SMIC : salaire minimum de croissance"></option>
+                    <option value="SMC" label="SMC : salaire minimum conventionnel"></option>
+                </select>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Ordre des rémunérations annuelles</span>
+                <input type="text" name="remunerationsAnnuelles[1].ordre" placeholder="1.1 ou 1.2 ou 2.1, etc">
+            </div>
+
+
+
+
 
 
 
@@ -113,23 +160,98 @@
 
 
             <div class="inputBoxFacturier">
-                <span class="detailFacturier">Numéro de sécurité sociale</span>
-                <input type="text" v-model="numero_de_securite_sociale" placeholder="obligatoire" required>
+                <span class="detailFacturier">Date de début année 3</span>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[2].dateDebut" @input="this.SiContratAvenant" required>
             </div>
             <div class="inputBoxFacturier">
-                <span class="detailFacturier">Clé numéro de sécurité sociale</span>
-                <input type="text" v-model="cle_numero_de_securite_sociale" placeholder="obligatoire" required>
-            </div>
-            <div class="inputBoxFacturier" style="display:flex;flex-direction: row;">
-                <span class="detailFacturier">Travailleur handicapé</span>
-                <input type="checkbox" v-model="travailleur_handicape" required>
+                <span class="detailFacturier">Date de fin année 3</span>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[2].dateFin" @input="this.SiContratAvenant" required>
             </div>
             <div class="inputBoxFacturier">
-                <div v-if="afficheFormulaireAvenant==true" class="etudiantAvenant" style="display:flex;">
+                <span class="detailFacturier">Pourcentage année 3</span>
+                <input type="number" name="remunerationsAnnuelles[2].taux" min="0" max=" 100" step="1">
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Type de salaire</span>
+                <select name="remunerationsAnnuelles[2].typeSalaire">
+                    <option value="SMIC" label="SMIC : salaire minimum de croissance"></option>
+                    <option value="SMC" label="SMC : salaire minimum conventionnel"></option>
+                </select>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Ordre des rémunérations annuelles</span>
+                <input type="text" name="remunerationsAnnuelles[2].ordre" placeholder="1.1 ou 1.2 ou 2.1, etc">
+            </div>
 
 
-                </div>
-            </div>   
+
+
+
+
+
+
+
+
+
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Date de début année 4</span>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[3].dateDebut" @input="this.SiContratAvenant" required>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Date de fin année 4</span>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[3].dateFin" @input="this.SiContratAvenant" required>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Pourcentage année 4</span>
+                <input type="number" name="remunerationsAnnuelles[3].taux" min="0" max=" 100" step="1">
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Type de salaire</span>
+                <select name="remunerationsAnnuelles[3].typeSalaire">
+                    <option value="SMIC" label="SMIC : salaire minimum de croissance"></option>
+                    <option value="SMC" label="SMC : salaire minimum conventionnel"></option>
+                </select>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Ordre des rémunérations annuelles</span>
+                <input type="text" name="remunerationsAnnuelles[3].ordre" placeholder="1.1 ou 1.2 ou 2.1, etc">
+            </div>
+
+
+
+
+
+
+
+
+
+
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Date de début année 5</span>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[4].dateDebut" @input="this.SiContratAvenant" required>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Date de fin année 5</span>
+                <input id="dateNaissanceContrat" type="date" name="remunerationsAnnuelles[4].dateFin" @input="this.SiContratAvenant" required>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Pourcentage année 5</span>
+                <input type="number" name="remunerationsAnnuelles[4].taux" min="0" max=" 100" step="1">
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Type de salaire</span>
+                <select name="remunerationsAnnuelles[4].typeSalaire">
+                    <option value="SMIC" label="SMIC : salaire minimum de croissance"></option>
+                    <option value="SMC" label="SMC : salaire minimum conventionnel"></option>
+                </select>
+            </div>
+            <div class="inputBoxFacturier">
+                <span class="detailFacturier">Ordre des rémunérations annuelles</span>
+                <input type="text" name="remunerationsAnnuelles[4].ordre" placeholder="1.1 ou 1.2 ou 2.1, etc">
+            </div>
+
+
+            
 
             <div v-if="afficheErreurs" class="erreur">
                 <p>{{messageErreur}}</p>
@@ -167,72 +289,44 @@
 
         data() {
             return {
+                action: construitURLService.methods.construitURLConnectionBack(
+        'dossier',
+        configuration.data().urlPossibles.modifier
+      ),
                 afficheFormulaireAvenant: false,
                 afficheContratPrecedent: true,
                 afficheErreurs: false,
                 messageErreur: "",
-
-                mode_contractuel: "",
-                type_de_contrat: "",
-                type_de_derogation: "",
-                numero_contrat_precedent: "",
-
-                date_conclusion: "",
-                date_debut_execution_contrat: "",
-                date_fin_contrat: "",
-
-                duree_hebdomadaire_travail_heures: "",
-                duree_hebdomadaire_travail_minutes: "",
-                travail_sur_machines_dangereuses: "",
-                date_effet_avenant: "",
-                salaire_brut_embauche: "",
-
-                date_début_annee_un: "",
-                date_fin_annee_un: "",
-                pourcentage_annee_un: "",
-                type_remuneration_annee_un: "",
-
-                date_début_annee_un_changement_tranche_age: "",
-                date_fin_annee_un_changement_tranche_age: "",
-                pourcentage_annee_un_changement_tranche_age: "",
-                type_remuneration_annee_un_changement_tranche_age: "",
-
-                date_début_annee_deux: "",
-                date_fin_annee_deux: "",
-                pourcentage_annee_deux: "",
-                type_remuneration_annee_deux: "",
-
-                date_début_annee_deux_changement_tranche_age: "",
-                date_fin_annee_deux_changement_tranche_age: "",
-                pourcentage_annee_deux_changement_tranche_age: "",
-                type_remuneration_annee_deux_changement_tranche_age: "",
-
-                date_début_annee_trois: "",
-                date_fin_annee_trois: "",
-                pourcentage_annee_trois: "",
-                type_remuneration_annee_trois: "",
-
-                date_début_annee_trois_changement_tranche_age: "",
-                date_fin_annee_trois_changement_tranche_age: "",
-                pourcentage_annee_trois_changement_tranche_age: "",
-                type_remuneration_annee_trois_changement_tranche_age: "",
-
-                date_début_annee_quatre: "",
-                date_fin_annee_quatre: "",
-                pourcentage_annee_quatre: "",
-                type_remuneration_annee_quatre: "",
-
-                date_début_annee_quatre_changement_tranche_age: "",
-                date_fin_annee_quatre_changement_tranche_age: "",
-                pourcentage_annee_quatre_changement_tranche_age: "",
-                type_remuneration_annee_quatre_changement_tranche_age: "",
-
-                nourriture: "",
-                logement: "",
-                autres: ""
             }
         },
-        methods: {
+        methods: {init() {
+      let obj = this.$parent.itemEdite,
+        form = this.$el,
+        _id_ = this.$parent.idCourant;
+      form.elements['__id__'].value = _id_;
+      if (obj) {
+        for (let inputElt of form.elements) {
+          let prop = inputElt.name;
+          if (prop) {
+            if (prop == '__id__') {
+              continue;
+            }
+            let props = prop.split('.'),
+              v;
+            v =
+              props.reduce(function (a, c) {
+                return a[c];
+              }, obj) || '';
+            if (inputElt.type == 'checkbox') {
+              inputElt.checked = v == 1 || v == 'true';
+            } else {
+              inputElt.value = v;
+            }
+          }
+        }
+      }
+    },
+    beforeSubmit() {},
             verificationDates() {
 
                 //Condition de validation de la donnée (cf. https://www.cfadock.fr/portail_developpeur#/tabs/null)

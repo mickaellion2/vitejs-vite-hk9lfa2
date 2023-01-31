@@ -1,20 +1,43 @@
 <template>
-<div>
+  <div>
+        <FormulaireOpco
+          v-if="etatFormulaire == 'opco'"
+          v-on:remetEtatInitial="this.remetEtatInitial"
+          id="formOpco"
+        >
+        </FormulaireOpco>
+        <FormulaireApprenti
+          v-if="etatFormulaire == 'cerfa.apprenti'"
+          v-on:remetEtatInitial="this.remetEtatInitial"
+          id="formApprenti"
+        >
+        </FormulaireApprenti>
+        <FormulaireEmployeur
+          v-if="etatFormulaire == 'cerfa.employeur'"
+          v-on:remetEtatInitial="this.remetEtatInitial"
+          id="formEmployeur"
+        >
+        </FormulaireEmployeur>
+        <FormulaireContrat
+          v-if="etatFormulaire == 'cerfa.contrat'"
+          v-on:remetEtatInitial="this.remetEtatInitial"
+          id="formContrat"
+        >
+        </FormulaireContrat>
+        <FormulaireMaitre
+          v-if="etatFormulaire == 'cerfa.maitre1'"
+          v-on:remetEtatInitial="this.remetEtatInitial"
+          id="formMaitre1"
+        >
+        </FormulaireMaitre>
+        <FormulaireMaitre
+          v-if="etatFormulaire == 'cerfa.maitre2'"
+          v-on:remetEtatInitial="this.remetEtatInitial"
+          id="formMaitre2"
+        >
+        </FormulaireMaitre>
 
-          <FormulaireOpco
-            v-if="etatFormulaire == 'opco'"
-            v-on:remetEtatInitial="this.remetEtatInitial"
-            id="formOpco"
-          >
-          </FormulaireOpco>
-          <FormulaireApprenti
-            v-if="etatFormulaire == 'cerfa.apprenti'"
-            v-on:remetEtatInitial="this.remetEtatInitial"
-            id="formApprenti"
-          >
-          </FormulaireApprenti>
-
-    </div>
+  </div>
   <table id="tablefacturier" @click="editFacturier">
     <thead id="theadTableauFacturier">
       <tr>
@@ -22,6 +45,8 @@
         <th>Apprenti</th>
         <th>Formation</th>
         <th>Employeur</th>
+        <th>Ma&icirc;tre 1</th>
+        <th>Ma&icirc;tre 2</th>
         <th>Contrat</th>
         <th>OPCO</th>
         <th>Reste</th>
@@ -69,6 +94,8 @@
 
           <!--bouton-base @click="formMaitre = true" class="BoutonBaseRecherche" id="BoutonBaseRechercheMaitre" :intituleBouton="this.$data.nomBoutonMaitre" v-on:click="this.ajouterUnMaitre"></bouton-base-->
         </td>
+        <td></td>
+        <td></td>
         <td></td>
         <td>
           <select>
@@ -122,7 +149,7 @@
             icon="fa-file-circle-plus"
           />
         </td>
-        <td>
+        <td class="editable" data-prop="cerfa.employeur">
           <span v-if="item.cerfa.employeur">{{
             item.cerfa.employeur.denomination
           }}</span>
@@ -133,7 +160,29 @@
             icon="fa-file-circle-plus"
           />
         </td>
-        <td>
+        <td class="editable" data-prop="cerfa.maitre1">
+          <span v-if="item.cerfa.maitre1">{{
+            item.cerfa.maitre1.nom
+          }}</span>
+          <font-awesome-icon
+            v-else
+            @click="$emit(this.evenement)"
+            class="fontIcone"
+            icon="fa-file-circle-plus"
+          />
+        </td>
+        <td class="editable" data-prop="cerfa.maitre2">
+          <span v-if="item.cerfa.maitre2">{{
+            item.cerfa.maitre2.nom
+          }}</span>
+          <font-awesome-icon
+            v-else
+            @click="$emit(this.evenement)"
+            class="fontIcone"
+            icon="fa-file-circle-plus"
+          />
+        </td>
+        <td class="editable" data-prop="cerfa.contrat">
           <span v-if="item.cerfa.contrat">{{
             formateDate(item.cerfa.contrat.dateDebutContrat)
           }}</span>
@@ -394,6 +443,9 @@ export default {
 </script>
 
 <style scoped>
+.premiereCaseTableauRecherche {
+  max-width:120px;
+}
 #titreTableauFacturerNonSolde {
   display: flex;
   background: var(--mauve-clair);
