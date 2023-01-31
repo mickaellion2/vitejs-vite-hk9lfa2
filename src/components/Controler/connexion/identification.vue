@@ -1,5 +1,5 @@
 <template>
-<form id="formid" :data-service="action">
+<form id="formid" :action="action">
   <section class="boite">
     <section class="formulaire">
       <h1>Connexion</h1>

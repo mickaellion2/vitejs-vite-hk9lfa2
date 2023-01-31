@@ -1,51 +1,17 @@
 <template>
-  <div>
-    <FormulaireOpco
-      v-if="etatFormulaire == 'opco'"
-      v-on:remetEtatInitial="this.remetEtatInitial"
-      id="formOpco"
-    >
-    </FormulaireOpco>
-    <FormulaireApprenti
-      v-if="etatFormulaire == 'cerfa.apprenti'"
-      v-on:remetEtatInitial="this.remetEtatInitial"
-      id="formApprenti"
-    >
-    </FormulaireApprenti>
-    <FormulaireEmployeur
-      v-if="etatFormulaire == 'cerfa.employeur'"
-      v-on:remetEtatInitial="this.remetEtatInitial"
-      id="formEmployeur"
-    >
-    </FormulaireEmployeur>
-    <FormulaireContrat
-      v-if="etatFormulaire == 'cerfa.contrat'"
-      v-on:remetEtatInitial="this.remetEtatInitial"
-      id="formContrat"
-    >
-    </FormulaireContrat>
-    <FormulaireMaitre
-      v-if="etatFormulaire == 'cerfa.maitre1'"
-      v-on:remetEtatInitial="this.remetEtatInitial"
-      id="formMaitre1"
-    >
-    </FormulaireMaitre>
-    <FormulaireMaitre
-      v-if="etatFormulaire == 'cerfa.maitre2'"
-      v-on:remetEtatInitial="this.remetEtatInitial"
-      id="formMaitre2"
-    >
-    </FormulaireMaitre>
-  </div>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
+
   <table id="tablefacturier" @click="editFacturier">
     <thead id="theadTableauFacturier">
       <tr>
+        <th>Actions</th>
         <th>N°</th>
         <th>Apprenti</th>
         <th>Formation</th>
         <th>Employeur</th>
-        <th>Ma&icirc;tre 1</th>
-        <th>Ma&icirc;tre 2</th>
         <th>Contrat</th>
         <th>OPCO</th>
         <th>Reste</th>
@@ -56,6 +22,7 @@
     </thead>
     <tbody id="tbodyfiltresFacturier">
       <tr>
+        <td></td>
         <td id="premiereCaseTableauRecherche">
           <form id="formcreadossier">
             <input type="hidden" name="cdate" value="" />
@@ -94,8 +61,6 @@
           <!--bouton-base @click="formMaitre = true" class="BoutonBaseRecherche" id="BoutonBaseRechercheMaitre" :intituleBouton="this.$data.nomBoutonMaitre" v-on:click="this.ajouterUnMaitre"></bouton-base-->
         </td>
         <td></td>
-        <td></td>
-        <td></td>
         <td>
           <select>
             <option value="0">Choisir</option>
@@ -114,12 +79,43 @@
         <td></td>
       </tr>
     </tbody>
-
+    <tbody>
+      <tr>
+        <td colspan="10">
+          <FormulaireOpco
+            v-if="etatFormulaire == 'opco'"
+            v-on:remetEtatInitial="this.remetEtatInitial"
+            id="formOpco"
+            @insertion-bdd="insereObjetDansBdd"
+          >
+          </FormulaireOpco>
+          <FormulaireApprenti
+            v-if="etatFormulaire == 'cerfa.apprenti'"
+            v-on:remetEtatInitial="this.remetEtatInitial"
+            :objetInit="itemEdite"
+            id="formApprenti"
+          >
+          </FormulaireApprenti>
+        </td>
+      </tr>
+    </tbody>
     <tbody id="lignesDuFacturier">
       <tr
         v-for="(item, index) in itemsAffiches"
         :data-num="index + nbItemsParPage * pageCourante"
       >
+        <td>
+          <i
+            class="fa fa-arrow-right"
+            aria-hidden="true"
+            @click="transmettreDossier"
+          ></i
+          ><i
+            class="fa fa-trash-o"
+            aria-hidden="true"
+            @click="mettreDossierCorbeille"
+          ></i>
+        </td>
         <td>
           {{
             item.cerfa.numeroExterne || item.cerfa.numeroInterne || 'NOUVEAU'
@@ -148,7 +144,7 @@
             icon="fa-file-circle-plus"
           />
         </td>
-        <td class="editable" data-prop="cerfa.employeur">
+        <td>
           <span v-if="item.cerfa.employeur">{{
             item.cerfa.employeur.denomination
           }}</span>
@@ -159,34 +155,10 @@
             icon="fa-file-circle-plus"
           />
         </td>
-        <td class="editable" data-prop="cerfa.maitre1">
-          <span v-if="item.cerfa.maitre1">{{ item.cerfa.maitre1.nom }}</span>
-          <font-awesome-icon
-            v-else
-            @click="$emit(this.evenement)"
-            class="fontIcone"
-            icon="fa-file-circle-plus"
-          />
-        </td>
-        <td class="editable" data-prop="cerfa.maitre2">
-          <span v-if="item.cerfa.maitre2">{{ item.cerfa.maitre2.nom }}</span>
-          <font-awesome-icon
-            v-else
-            @click="$emit(this.evenement)"
-            class="fontIcone"
-            icon="fa-file-circle-plus"
-          />
-        </td>
-        <td class="editable" data-prop="cerfa.contrat">
+        <td>
           <span v-if="item.cerfa.contrat">{{
             formateDate(item.cerfa.contrat.dateDebutContrat)
           }}</span>
-          <font-awesome-icon
-            v-else
-            @click="$emit(this.evenement)"
-            class="fontIcone"
-            icon="fa-file-circle-plus"
-          />
         </td>
         <td>{{ item.opco }}</td>
         <td>{{ resteAPayer(item.echeances) }}</td>
@@ -228,9 +200,8 @@ import BoutonBase from '@/components/Controler/elementsHTML/bouton/BoutonBase.vu
 import elementContratTableauFacturier from '@/components/Controler/backOffice/elementContratTableauFacturier.vue';
 import FormulaireApprenti from '@/components/Controler/backOffice/FormulaireApprenti.vue';
 import FormulaireOpco from '@/components/Controler/backOffice/FormulaireOpco.vue';
-import FormulaireEmployeur from '@/components/Controler/backOffice/FormulaireEmployeur.vue';
-import FormulaireMaitre from '@/components/Controler/backOffice/FormulaireMaitre.vue';
-import FormulaireContrat from '@/components/Controler/backOffice/FormulaireContrat.vue';
+import formulaireEmployeur from '@/components/Controler/backOffice/formulaireEmployeur.vue';
+import formulaireMaitre from '@/components/Controler/backOffice/formulaireMaitre.vue';
 //import formulaireContrat from "@/components/Controler/backOffice/formulaireContrat.vue";
 import construitURLService from '@/services/construitURL.service.vue';
 import configuration from '@/administration/configuration.vue';
@@ -246,9 +217,6 @@ export default {
   name: 'tableauFactureNonSoldees',
   components: {
     BoutonBase,
-    FormulaireEmployeur,
-    FormulaireMaitre,
-    FormulaireContrat,
     FormulaireOpco,
     FormulaireApprenti,
     elementContratTableauFacturier,
@@ -268,14 +236,7 @@ export default {
       pageCourante: 0,
       itemEdite: null,
       idCourant: 0,
-      indexCourant: 0,
     };
-  },
-  mounted() {
-    this.$el.parentNode.addEventListener(
-      'onEspaceSubmitSuccessB',
-      this.onMAJOK.bind(this)
-    );
   },
   computed: {
     itemsAffiches() {
@@ -289,47 +250,10 @@ export default {
     },
   },
   methods: {
-    onMAJOK(e) {
-      let i = this.indexCourant;//this.items.indexOf(this.itemEdite);
-      if (i > -1) {
-        this.items[i] = this.itemEdite = e.detail.reponse.extra_info;
-      }
-      this.changeEtatFormulaire('');
-    },
-    initFormulaire(formCompmonent = null, formid = '', _obj = null) {
-      let obj = _obj || this.itemEdite || {},
-        form =
-          formCompmonent && formCompmonent.$el.nodeName == 'FORM'
-            ? formCompmonent.$el
-            : formid
-            ? document.getElementById(formid)
-            : this.$el.parentNode.querySelector('form'),
-        _id_ = this.idCourant;
-      form.elements['__id__'].value = _id_;
-      if (obj) {
-        for (let inputElt of form.elements) {
-          if (inputElt.type == 'hidden') {
-            continue;
-          }
-          let prop = inputElt.name;
-          if (prop) {
-            let props = prop.split('.'),
-              v;
-            v =
-              props.reduce(function (a, c) {
-                return a ? a[c] || '' : '';
-              }, obj) || '';
-            if (inputElt.type == 'checkbox') {
-              inputElt.checked = v == 1 || v == 'true';
-            } else {
-              inputElt.value = v;
-            }
-          }
-        }
-      }
-    },
     editFacturier(e) {
-      let t = e.target;
+      let form = e.currentTarget,
+        t = e.target;
+      e.preventDefault();
       if (t.classList && t.classList.contains('editable')) {
         let numItem = parseInt(t.parentNode.getAttribute('data-num')),
           prop = t.getAttribute('data-prop'),
@@ -337,17 +261,13 @@ export default {
         if (item) {
           let p = prop.split('.');
           this.itemEdite = p.reduce(function (a, c) {
-            if (!a.hasOwnProperty(c)) {
-              a[c] = {};
-            }
             return a[c];
           }, item);
           this.idCourant =
             typeof item._id == 'string'
               ? item._id
-              : "ObjectId('" + item._id.$oid + "')";
-          this.indexCourant = numItem;
-          this.changeEtatFormulaire(prop);
+              : "ObjectId('" + item._id.$oid + ")'";
+          this.changeEtaFormulaire(prop);
         }
       }
     },
@@ -431,7 +351,7 @@ export default {
         }, []);
       }
     },
-    changeEtatFormulaire(etat) {
+    changeEtaFormulaire(etat) {
       if (this.etatFormulaire == etat) {
         this.etatFormulaire = '';
       } else {
@@ -493,14 +413,18 @@ export default {
         valeur.lastChild.value = '';
       }
     },
+    mettreDossierCorbeille(e) {
+      console.log(this.items);
+      console.log(e);
+      console.log(e.parentNode);
+      console.log(e.parentElement);
+    },
+    transmettreDossier() {},
   },
 };
 </script>
 
 <style scoped>
-.premiereCaseTableauRecherche {
-  max-width: 120px;
-}
 #titreTableauFacturerNonSolde {
   display: flex;
   background: var(--mauve-clair);

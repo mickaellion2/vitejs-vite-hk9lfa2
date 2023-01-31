@@ -1,8 +1,8 @@
 <template>
   <input v-if="evenement=='onEspaceSubmit'" @click="$emit(this.evenement)"
-      :value = "intitule"
       type="submit"
-  />
+      :value = "intitule"
+  />  
   <button v-else-if="intitule" @click="$emit(this.evenement)">
     <font-awesome-icon
       v-if="type == 'ouvrirformulaire'"
