@@ -2,24 +2,28 @@
   <section class="sidebar">
     <div class="side-header">
       <div class="logo-entreprise">
-        <img :src="this.logoEntreprise" crossOrigin="Anonymous" alt="entreprise" >
+        <img
+          :src="this.logoEntreprise"
+          crossOrigin="Anonymous"
+          alt="entreprise"
+        />
       </div>
     </div>
     <div class="side-content">
       <div class="profil">
         <div class="photoProfil">
-          <img :src="this.utilisateur.photoProfil" >
+          <img :src="this.utilisateur.photoProfil" />
         </div>
-        <h4>{{this.utilisateur.nomUtilisateur}}</h4>
+        <h4>{{ this.utilisateur.nomUtilisateur }}</h4>
       </div>
     </div>
-    <div class="side-menu">
+    <div class="side-menu hidden">
       <ul>
         <li>
           <router-link class="lienNavBar" to="/facturierUI">
             <div class="elementLienNav">
               <div class="logoNavBar">
-                <font-awesome-icon icon="fa-file-invoice"/>
+                <font-awesome-icon icon="fa-file-invoice" />
               </div>
               <span>
                 <small>Factures non soldées</small>
@@ -31,7 +35,7 @@
           <router-link class="lienNavBar" to="/facturierUI">
             <div class="elementLienNav">
               <div class="logoNavBar">
-                <font-awesome-icon icon="fa-file-invoice"/>
+                <font-awesome-icon icon="fa-file-invoice" />
               </div>
               <span>
                 <small>Factures soldées</small>
@@ -43,7 +47,7 @@
           <router-link class="lienNavBar" to="/facturierUI">
             <div class="elementLienNav">
               <div class="logoNavBar">
-                <font-awesome-icon icon="fa-file-invoice"/>
+                <font-awesome-icon icon="fa-file-invoice" />
               </div>
               <span>
                 <small>Toutes les factures</small>
@@ -55,7 +59,7 @@
           <router-link class="lienNavBar" to="/facturierUI">
             <div class="elementLienNav">
               <div class="logoNavBar">
-                <font-awesome-icon icon="fa-file-invoice"/>
+                <font-awesome-icon icon="fa-file-invoice" />
               </div>
               <span>
                 <small>Creer facture</small>
@@ -67,7 +71,7 @@
           <router-link class="lienNavBar" to="/transmettreDossier">
             <div class="elementLienNav">
               <div class="logoNavBar">
-                <font-awesome-icon icon="fa-file-invoice"/>
+                <font-awesome-icon icon="fa-file-invoice" />
               </div>
               <span>
                 <small>Transmettre un dossier</small>
@@ -79,26 +83,27 @@
           <router-link class="lienNavBar" to="/facturierUI">
             <div class="elementLienNav">
               <div class="logoNavBar">
-                <font-awesome-icon icon="fa-file-invoice"/>
+                <font-awesome-icon icon="fa-file-invoice" />
               </div>
               <span>
-                <small>Créer un formulaire
+                <small
+                  >Créer un formulaire
                   <!--bouton-base @click="formApprenti = true" class="BoutonBaseRecherche" id="BoutonBaseRechercheApprenti" :intituleBouton="this.$data.nomBoutonApprenti" v-on:click="this.ajouterUnApprenti" style="position: relative;left: 200px;">Maitre</bouton-base-->
                 </small>
                 <!-- pour créer un formulaire spécifique : Maitre, Contrat, Formation, Attestation-->
               </span>
             </div>
             <ul style="display: none">
-                <li>
-                  <div class="elementLienNav">
-                    <div class="logoNavBar">
-                      <font-awesome-icon icon="fa-file-invoice"/>
-                    </div>
-                    <span>
-                      <small>Entreprise</small>
-                      <!-- pour créer un formulaire spécifique : Maitre, Contrat, Formation, Attestation-->
-                    </span>
+              <li>
+                <div class="elementLienNav">
+                  <div class="logoNavBar">
+                    <font-awesome-icon icon="fa-file-invoice" />
                   </div>
+                  <span>
+                    <small>Entreprise</small>
+                    <!-- pour créer un formulaire spécifique : Maitre, Contrat, Formation, Attestation-->
+                  </span>
+                </div>
               </li>
             </ul>
           </router-link>
@@ -107,7 +112,7 @@
           <router-link class="lienNavBar" to="/modifierProfil">
             <div class="elementLienNav">
               <div class="logoNavBar">
-                <font-awesome-icon icon="fa-file-invoice"/>
+                <font-awesome-icon icon="fa-file-invoice" />
               </div>
               <span>
                 <small>Parametres</small>
@@ -119,10 +124,10 @@
           <router-link class="lienNavBar" to="/">
             <div class="elementLienNav" id="elementDeconnexion">
               <div class="logoNavBar">
-                <font-awesome-icon icon="fa-file-invoice"/>
+                <font-awesome-icon icon="fa-file-invoice" />
               </div>
               <span>
-                <small >Deconnexion</small>
+                <small>Deconnexion</small>
               </span>
             </div>
           </router-link>
@@ -134,22 +139,22 @@
 
 <script>
 //import logoEntreprise from '#/logo0_small.png'
-import App from "@/App.vue"
+import App from '@/App.vue';
 export default {
-  name: "navBarFacturier",
-  data(){
-    return{
-      logoEntreprise:App.data().pab + '/logo0_small.png'
-    }
+  name: 'navBarFacturier',
+  data() {
+    return {
+      logoEntreprise: App.data().pab + '/logo0_small.png',
+    };
   },
-  props:{
-    utilisateur: Object
-  }
-}
+  props: {
+    utilisateur: Object,
+  },
+};
 </script>
 
 <style scoped>
-section.sidebar{
+section.sidebar {
   position: fixed;
   height: 100%;
   width: 165px;
@@ -160,7 +165,7 @@ section.sidebar{
   background: var(--color-dark);
 }
 
-div.side-header{
+div.side-header {
   background: white;
   height: 120px;
   display: flex;
@@ -168,26 +173,25 @@ div.side-header{
   align-items: center;
 }
 
-.logo-entreprise img{
+.logo-entreprise img {
   height: 90px;
   width: 90px;
 }
 
-.profil img{
+.profil img {
   height: 90px;
   width: 90px;
   border-radius: 50%;
-
 }
 
-div.profil{
+div.profil {
   text-align: center;
   padding: 1rem 0rem;
 }
 
-div.photoProfil{
+div.photoProfil {
   height: 90px;
-  width:90px;
+  width: 90px;
   display: inline-block;
   margin: 0 auto;
   background-repeat: no-repeat;
@@ -195,79 +199,81 @@ div.photoProfil{
   border-radius: 50%;
 }
 
-div.profil h4{
+div.profil h4 {
   color: white;
   font-weight: 300;
 }
 
-div.side-menu li{
+div.side-menu li {
   position: relative;
   left: -15px;
   display: block;
 }
 
-.logoNavBar{
+.logoNavBar {
   display: block;
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: -0.4em;
 }
 
-div.side-menu span{
+div.side-menu span {
   display: block;
   text-align: center;
-  font-size: 1rem ;
+  font-size: 1rem;
 }
 
-.elementLienNav{
+.elementLienNav {
   margin-bottom: 1.2em;
-border: solid white 1px;
+  border: solid white 1px;
 }
 
-.lienNavBar{
+.lienNavBar {
   text-decoration: none;
   color: white;
 }
 
 .elementLienNav:hover {
-    text-decoration: none;
-    color: var(--rose-pastel);
-    box-shadow:0px 0px 3px 1px white;
+  text-decoration: none;
+  color: var(--rose-pastel);
+  box-shadow: 0px 0px 3px 1px white;
 }
-#elementDeconnexion{
-    border: solid red 2px;
+#elementDeconnexion {
+  border: solid red 2px;
 }
-#elementDeconnexion:hover{
-    box-shadow:0px 0px 3px 1px red;
+#elementDeconnexion:hover {
+  box-shadow: 0px 0px 3px 1px red;
 }
 
-.elementLienNav{
-        /*border: solid white 1px;*/
-        border-radius: 6px 0 6px 0;
-        background-color : #3d5276;
-    }
+.elementLienNav {
+  /*border: solid white 1px;*/
+  border-radius: 6px 0 6px 0;
+  background-color: #3d5276;
+}
 
 @media screen and (max-height: 790px) {
-    .logoNavBar svg{
-        display: none;
-    }
-    .elementLienNav small{
-        font-size: 1.1em;
-    }
+  .logoNavBar svg {
+    display: none;
+  }
+  .elementLienNav small {
+    font-size: 1.1em;
+  }
 
-    .elementLienNav{
-        border: solid white 1px;
-        border-radius: 6px 0 6px 0;
-        padding: 2% 3%;
-        background-color : #3d5276;
-    }
-    .logoNavBar{
-        margin-bottom: 0em;
-    }
+  .elementLienNav {
+    border: solid white 1px;
+    border-radius: 6px 0 6px 0;
+    padding: 2% 3%;
+    background-color: #3d5276;
+  }
+  .logoNavBar {
+    margin-bottom: 0em;
+  }
 
-    #elementDeconnexion{
-        border: solid red 2px;
-    }
-        
+  #elementDeconnexion {
+    border: solid red 2px;
+  }
+}
+.hidden {
+  display: none !important;
 }
 </style>
