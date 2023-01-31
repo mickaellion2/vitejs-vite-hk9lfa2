@@ -1,5 +1,5 @@
 <template>
-  <form :action="action" class="formulaireAjoutFacturier">
+  <form :data-service="action" class="formulaireAjoutFacturier">
     <fieldset class="titreFormulaireFacturier">
       <legend>
         Formulaire Maitre (<a
@@ -12,7 +12,7 @@
       <input type="hidden" name="__base__" value="cerfa.maitre1" />
       <input type="hidden" name="__id__" value="0" />
       <div class="detailApprenti">
-        <div class="inputBoxFacturier">
+        <div class="_inputBoxFacturier">
           <span class="detailFacturier">Nom de naissance</span>
           <input
             type="text"
@@ -23,7 +23,7 @@
             required
           />
         </div>
-        <div class="inputBoxFacturier">
+        <div class="_inputBoxFacturier">
           <span class="detailFacturier">Prénom</span>
           <input
             type="text"
@@ -34,7 +34,7 @@
             required
           />
         </div>
-        <div class="inputBoxFacturier">
+        <div class="_inputBoxFacturier">
           <span class="detailFacturier">Date de naissance</span>
           <input
             id="dateNaissanceApprenti"
@@ -50,73 +50,11 @@
         intituleBouton="effacer"
         v-on:click="this.effacerFormulaire"
       ></BoutonBase>
-
-      <BoutonBase
+      <BoutonSubmit
         class="BoutonBaseRecherche"
         intituleBouton="Soumettre"
-      ></BoutonBase>
-      <div v-if="afficheErreurs" class="erreur">
-        <p>{{ messageErreur }}</p>
-      </div>
-    </fieldset>
-  </form>
-
-  <form :action="action" class="formulaireAjoutFacturier">
-    <fieldset class="titreFormulaireFacturier">
-      <legend>
-        Formulaire Maitre (<a
-          target="_blank"
-          href="https://www.formulaires.service-public.fr/gf/getNotice.do?cerfaNotice=51649&cerfaFormulaire=10103"
-          style="font-weight: bold"
-          >Aide</a
-        >)
-      </legend>
-      <input type="hidden" name="__base__" value="cerfa.maitre2" />
-      <input type="hidden" name="__id__" value="0" />
-      <div class="detailApprenti">
-        <div class="inputBoxFacturier">
-          <span class="detailFacturier">Nom de naissance</span>
-          <input
-            type="text"
-            placeholder="obligatoire"
-            minlength="1"
-            maxlength="80"
-            name="nom"
-            required
-          />
-        </div>
-        <div class="inputBoxFacturier">
-          <span class="detailFacturier">Prénom</span>
-          <input
-            type="text"
-            name="prenom"
-            placeholder="obligatoire"
-            minlength="1"
-            maxlength="80"
-            required
-          />
-        </div>
-        <div class="inputBoxFacturier">
-          <span class="detailFacturier">Date de naissance</span>
-          <input
-            id="dateNaissanceApprenti"
-            type="date"
-            name="dateNaissance"
-            @input="this.SiApprentiMineur"
-            required
-          />
-        </div>
-      </div>
-      <BoutonBase
-        class="BoutonBaseRecherche"
-        intituleBouton="effacer"
-        v-on:click="this.effacerFormulaire"
-      ></BoutonBase>
-
-      <BoutonBase
-        class="BoutonBaseRecherche"
-        intituleBouton="Soumettre"
-      ></BoutonBase>
+        data-formid="formMaitre"
+      ></BoutonSubmit>
       <div v-if="afficheErreurs" class="erreur">
         <p>{{ messageErreur }}</p>
       </div>
@@ -126,6 +64,7 @@
 
 <script>
 import BoutonBase from '@/components/Controler/elementsHTML/bouton/BoutonBase.vue';
+import BoutonSubmit from '@/components/Controler/elementsHTML/bouton/BoutonSubmit.vue';
 import construitURLService from '@/services/construitURL.service.vue';
 //import {Maitre} from "@/components/Model/Maitre.Class";
 //import {Maitre} from "@/components/Model/MaitreTS.Class";
@@ -138,10 +77,15 @@ export default {
   name: 'FormulaireMaitre',
   components: {
     BoutonBase,
+    BoutonSubmit,
   },
 
   data() {
     return {
+      action: construitURLService.methods.construitURLConnectionBack(
+        'dossier',
+        configuration.data().urlPossibles.modifier
+      ),
       attestation_un: false,
       attestation_deux: false,
       nom_un: '',
@@ -151,6 +95,9 @@ export default {
       dateNaissance_un: '',
       dateNaissance_deux: '',
     };
+  },
+  mounted() {
+    this.$parent.initFormulaire();
   },
   methods: {
     SiMaitrePublic(event) {

@@ -1,5 +1,5 @@
 <template>
-  <form :action="action" class="formulaireAjoutFacturier">
+  <form :data-service="action" class="formulaireAjoutFacturier">
     <fieldset class="titreFormulaireFacturier">
       <legend>
         Formulaire Employeur (<a
@@ -13,7 +13,7 @@
       <input type="hidden" name="__id__" value="0" />
       <div class="detailEmployeur">
         <div class="inputBoxFacturier">
-          <span class="detailFacturier">Dénomination de l'établissement</span>
+          <span class="detailFacturier">Nom établissement</span>
           <input type="text" name="denomination" maxlength="80" />
         </div>
         <div class="inputBoxFacturier">
@@ -225,16 +225,18 @@
             <input type="checkbox" name="regimeSpecifique" required />
           </div>
         </div>
+      </div>
+      <div>
         <bouton-base
           class="BoutonBaseRecherche"
           intituleBouton="effacer"
           v-on:click="this.effacerFormulaire"
         ></bouton-base>
-        <bouton-base
+        <BoutonSubmit
           class="BoutonBaseRecherche"
-          intituleBouton="ajouter"
-          v-on:click="this.rentrerEmployeurBDD"
-        ></bouton-base>
+          intituleBouton="Soumettre"
+          data-formid="formEmployeur"
+        ></BoutonSubmit>
       </div>
     </fieldset>
   </form>
@@ -242,8 +244,8 @@
 
 <script>
 import BoutonBase from '@/components/Controler/elementsHTML/bouton/BoutonBase.vue';
+import BoutonSubmit from '@/components/Controler/elementsHTML/bouton/BoutonSubmit.vue';
 import construitURLService from '@/services/construitURL.service.vue';
-import Employeur from '@/components/Model/EmployeurJS.Class';
 import creationJSONService from '@/services/creationJSON.service.vue';
 import configuration from '@/administration/configuration.vue';
 import connexionAPIService from '@/services/connexionAPI.service.vue';
@@ -252,8 +254,8 @@ export default {
   name: 'FormulaireEmployeur',
   components: {
     BoutonBase,
+    BoutonSubmit,
   },
-
   data() {
     return {
       action: construitURLService.methods.construitURLConnectionBack(
@@ -262,35 +264,10 @@ export default {
       ),
     };
   },
+  mounted() {
+    this.$parent.initFormulaire();
+  },
   methods: {
-    init() {
-      let obj = this.$parent.itemEdite,
-        form = this.$el,
-        _id_ = this.$parent.idCourant;
-      form.elements['__id__'].value = _id_;
-      if (obj) {
-        for (let inputElt of form.elements) {
-          let prop = inputElt.name;
-          if (prop) {
-            if (prop == '__id__') {
-              continue;
-            }
-            let props = prop.split('.'),
-              v;
-            v =
-              props.reduce(function (a, c) {
-                return a[c];
-              }, obj) || '';
-            if (inputElt.type == 'checkbox') {
-              inputElt.checked = v == 1 || v == 'true';
-            } else {
-              inputElt.value = v;
-            }
-          }
-        }
-      }
-    },
-    beforeSubmit() {},
     afficherSiEmployeurPublic(event) {
       if (this.$data.afficheEmployeurPublic) {
         this.$data.afficheEmployeurPublic = false;
@@ -333,58 +310,7 @@ export default {
         console.log("Le format de l'email n'est pas bon");
       }
     },
-    async rentrerEmployeurBDD(event) {
-      console.log(this.$data.nom_de_naissance);
 
-      let employeur = new Employeur(
-        this.$data.siret,
-        this.$data.effectif,
-        this.$data.nom_du_contact,
-        this.$data.prenom_du_contact,
-        this.$data.type_employeur,
-        this.$data.employeur_specifique,
-        this.$data.etablissement,
-        this.$data.adresse,
-        this.$data.complement_adresse,
-        this.$data.code_postal,
-        this.$data.commune,
-        this.$data.telephone,
-        this.$data.courriel,
-        this.$data.code_naf,
-        this.$data.code_idcc,
-        this.$data.convention_collective,
-        this.$data.adhesion_apprenti_régime_spécifique_assurance_chomage,
-        this.$data.caisse_retraite_complementaire
-      );
-
-      let JSON = creationJSONService.methods.construitJSON(employeur);
-      let URL = construitURLService.methods.construitURLConnectionBack(
-        configuration.data().collections.employeur,
-        configuration.data().urlPossibles.ajouter
-      );
-      //Reservation case mémoire de la BDD
-      let reponseBDD = await connexionAPIService.methods.requete(URL, JSON);
-      if (reponseBDD.code_reponse !== 0) {
-        alert('erreur : ' + reponseBDD.Error_info);
-      } else {
-        employeur.modifieIdentifiantApprenti(
-          reponseBDD.extra_info.identifiantApprenti
-        );
-        JSON = creationJSONService.methods.construitJSON(employeur);
-        //Modification de la case mémoire et ajout de l'employeur en BDD
-        URL = construitURLService.methods.construitURLConnectionBack(
-          configuration.data().collections.employeur,
-          configuration.data().urlPossibles.modifier
-        );
-        reponseBDD = await connexionAPIService.methods.requete(URL, JSON);
-        if (reponseBDD.code_reponse !== 0) {
-          alert('erreur : ' + reponseBDD.Error_info);
-        } else {
-          this.$emit('remetEtatInitial', event);
-          alert('employeur ajouté en base de données');
-        }
-      }
-    },
     async effacerFormulaire() {
       for (let valeur of document.getElementsByClassName('detailEmployeur')[0]
         .children) {

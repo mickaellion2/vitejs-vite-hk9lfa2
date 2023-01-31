@@ -466,7 +466,6 @@ import BoutonSubmit from '@/components/Controler/elementsHTML/bouton/BoutonSubmi
 import construitURLService from '@/services/construitURL.service.vue';
 //import {Apprenti} from "@/components/Model/Apprenti.Class";
 //import {Apprenti} from "@/components/Model/ApprentiTS.Class";
-import Apprenti from '@/components/Model/ApprentiJS.Class';
 import creationJSONService from '@/services/creationJSON.service.vue';
 import configuration from '@/administration/configuration.vue';
 import connexionAPIService from '@/services/connexionAPI.service.vue';
@@ -529,43 +528,13 @@ export default {
       1
     ) {
       this.getListeDepartements().then((d) => {
-        _this.init('formApprenti');
+        _this.$parent.initFormulaire();
       });
     } else {
-      this.init('formApprenti');
+      this.$parent.initFormulaire();
     }
   },
   methods: {
-    init(formid = '', _obj = null) {
-      let obj = _obj || this.$parent.itemEdite,
-        form =
-          this.$el.nodeName == 'FORM'
-            ? this.$el
-            : document.getElementById(formid),
-        _id_ = this.$parent.idCourant;
-      form.elements['__id__'].value = _id_;
-      if (obj) {
-        for (let inputElt of form.elements) {
-          if (inputElt.type == 'hidden') {
-            continue;
-          }
-          let prop = inputElt.name;
-          if (prop) {
-            let props = prop.split('.'),
-              v;
-            v =
-              props.reduce(function (a, c) {
-                return a[c];
-              }, obj) || '';
-            if (inputElt.type == 'checkbox') {
-              inputElt.checked = v == 1 || v == 'true';
-            } else {
-              inputElt.value = v;
-            }
-          }
-        }
-      }
-    },
     beforeSubmit() {},
     SiApprentiMineur(event) {
       console.log(event);
@@ -622,69 +591,6 @@ export default {
     },
     rechercheCommunes() {
       return true;
-    },
-    async rentrerApprentiBDD(event) {
-      console.log(this.$data.nom_de_naissance);
-      if (true || document.querySelector('.formulaire').reportValidity()) {
-        console.log('Les informations du formulaire sont valides !');
-        let apprenti = new Apprenti(
-          this.$data.nom_de_naissance,
-          this.$data.nom_usage,
-          this.$data.prenom,
-          this.$data.dateNaissance,
-          this.$data.sexe,
-          this.$data.commune_de_naissance,
-          this.$data.departement_de_naissance,
-          this.$data.adresse,
-          this.$data.complement_adresse,
-          this.$data.code_postal,
-          this.$data.commune,
-          this.$data.nationalite,
-          this.$data.telephone,
-          this.$data.courriel,
-          this.$data.travailleur_handicape,
-          this.$data.numero_de_securite_sociale,
-          this.$data.cle_numero_de_securite_sociale,
-          this.$data.mineur_emancipe,
-          this.$data.nom_du_representant_legal,
-          this.$data.adresse_du_representant_legal,
-          this.$data.code_postal_du_representant_legal,
-          this.$data.prenom_du_representant_legal,
-          this.$data.complement_adresse_du_representant_legal,
-          this.$data.commune_du_representant_legal
-        );
-        let JSON = creationJSONService.methods.construitJSON(apprenti);
-        let URL = construitURLService.methods.construitURLConnectionBack(
-          configuration.data().collections.apprenti,
-          configuration.data().urlPossibles.ajouter
-        );
-        //Reservation case mémoire de la BDD
-        let reponseBDD = await connexionAPIService.methods.requete(URL, JSON);
-        if (reponseBDD.code_reponse !== 0) {
-          alert('erreur : ' + reponseBDD.Error_info);
-        } else {
-          apprenti.modifieIdentifiantApprenti(
-            reponseBDD.extra_info.identifiantApprenti
-          );
-          JSON = creationJSONService.methods.construitJSON(apprenti);
-          //Modification de la case mémoire et ajout de l'apprenti en BDD
-          URL = construitURLService.methods.construitURLConnectionBack(
-            configuration.data().collections.apprenti,
-            configuration.data().urlPossibles.modifier
-          );
-          reponseBDD = await connexionAPIService.methods.requete(URL, JSON);
-          if (reponseBDD.code_reponse !== 0) {
-            alert('erreur : ' + reponseBDD.Error_info);
-          } else {
-            this.$emit('remetEtatInitial', event);
-            alert('Apprenti ajouté en base de données');
-          }
-        }
-      } else {
-        console.log(
-          'Les informations du formulaire sont incorrectes, pas de liaison avec la BDD !'
-        );
-      }
     },
     async effacerFormulaire() {
       for (let valeur of document.getElementsByClassName('detailApprenti')[0]
